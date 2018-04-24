@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Cart - Amazon Pay Demo Shop</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/shop-cart.css" rel="stylesheet">
+    <style type="text/css">
+    <!--
+    #OffAmazonPaymentsWidgets0 {
+      width: 100%;
+    }
+    -->
+    </style>
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="#">Amazon Pay Demo Shop</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Home
+                <span class="sr-only">(current)</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Services</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Contact</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+      <div class="row">
+
+        <!-- Post Content Column -->
+        <div class="col-lg-8">
+
+          <!-- Title -->
+          <h1 class="mt-4">ショッピングカート</h1>
+
+          <hr>
+
+          <!-- Date/Time -->
+          <p>カートの中身</p>
+
+          <hr>
+
+          <!-- Preview Image -->
+          <div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col"> </th>
+                        <th scope="col">商品名</th>
+                        <th scope="col">単価(税込)</th>
+                        <th scope="col" class="text-center">数量</th>
+                        <th scope="col" class="text-right">小計</th>
+                        <th> </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><img src="https://dummyimage.com/50x50/55595c/fff" /> </td>
+                        <td>Sample1</td>
+                        <td class="text-right">￥2,000</td>
+                        <td><input class="form-control" type="text" value="1" /></td>
+                        <td class="text-right">￥2,000</td>
+                        <td class="text-right"><button class="btn btn-sm btn-secondary">削除</button> </td>
+                    </tr>
+                    <tr>
+                        <td><img src="https://dummyimage.com/50x50/55595c/fff" /> </td>
+                        <td>Sample2</td>
+                        <td class="text-right">￥500</td>
+                        <td><input class="form-control" type="text" value="1" /></td>
+                        <td class="text-right">￥500</td>
+                        <td class="text-right"><button class="btn btn-sm btn-secondary">削除</button> </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><strong>商品合計</strong></td>
+                        <td class="text-right"><strong>￥2,500</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+          </div>
+
+        </div>
+
+        <!-- Sidebar Widgets Column -->
+        <div class="col-lg-4 col-xs-12">
+
+          <!-- Side Widget -->
+          <div class="card my-4">
+            <h5 class="card-header">ご購入手続き</h5>
+            <div class="card-body">
+
+              <p>会員IDをお持ちの方</p>
+
+              <button type="submit" class="btn btn-info btn-lg btn-block">ログインしてレジへ進む</button>
+
+              <br>
+              <p>会員IDをお持ちでない方</p>
+
+              <div style="text-align: center; border: 1px solid #bbb;border-radius: 3px;padding:1px;margin:1px;"><div id="AmazonPayButton"></div><label style="font-size: 14px;line-height: 23px;">Amazonアカウントにご登録の住所・クレジットカード情報を利用して、簡単にご注文が出来ます。<br></label></div>
+
+              <br>
+
+              <button type="submit" class="btn btn-default btn-lg btn-block">会員登録せずにレジへ進む</button>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row">
+
+          <div class="col-md-12 col-xs-12">
+            <hr>
+            <h4>カートに入れたアイテムからのおすすめ</h4>
+            <br>
+          </div>
+
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+              <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+              <div class="card-body">
+                <h4 class="card-title">
+                  <a href="#">導入事例などをいれてみては？</a>
+                </h4>
+                <h5>￥1,000</h5>
+                <p class="card-text">テスト</p>
+              </div>
+              <div class="card-footer">
+                <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+              <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+              <div class="card-body">
+                <h4 class="card-title">
+                  <a href="#">Item One</a>
+                </h4>
+                <h5>￥1,000</h5>
+                <p class="card-text">テスト</p>
+              </div>
+              <div class="card-footer">
+                <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+              <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+              <div class="card-body">
+                <h4 class="card-title">
+                  <a href="#">Item One</a>
+                </h4>
+                <h5>￥1,000</h5>
+                <p class="card-text">テスト</p>
+              </div>
+              <div class="card-footer">
+                <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+              <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+              <div class="card-body">
+                <h4 class="card-title">
+                  <a href="#">Item One</a>
+                </h4>
+                <h5>￥1,000</h5>
+                <p class="card-text">テスト</p>
+              </div>
+              <div class="card-footer">
+                <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+              <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+              <div class="card-body">
+                <h4 class="card-title">
+                  <a href="#">Item One</a>
+                </h4>
+                <h5>￥1,000</h5>
+                <p class="card-text">テスト</p>
+              </div>
+              <div class="card-footer">
+                <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+              <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+              <div class="card-body">
+                <h4 class="card-title">
+                  <a href="#">Item One</a>
+                </h4>
+                <h5>￥1,000</h5>
+                <p class="card-text">テスト</p>
+              </div>
+              <div class="card-footer">
+                <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+        <!-- /.row -->
+
+
+      </div>
+      <!-- /.row -->
+
+    </div>
+    <!-- /.container -->
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; Amazon Pay 2018</p>
+      </div>
+      <!-- /.container -->
+    </footer>
+
+    <!-- Amazon Pay JavaScript -->
+    <script type='text/javascript'>
+      window.onAmazonLoginReady = function() {
+        amazon.Login.setClientId("amzn1.application-oa2-client.6827941495a24987b010d42bc906291b");
+      };
+
+      window.onAmazonPaymentsReady = function() {
+        showLoginButton();
+      };
+
+      function showLoginButton() {
+          var authRequest;
+          OffAmazonPayments.Button("AmazonPayButton", "ASKZOQVR9ZZJZ", {
+            type:  "PwA",
+            color: "Gold",
+            size:  "x-large",
+
+            authorization: function() {
+              loginOptions = {scope: "profile payments:widget payments:shipping_address", popup: true};
+              authRequest = amazon.Login.authorize (loginOptions, "shop-confirmation.html");
+            },
+            onError: function(error) {
+                console.log('test');
+                //document.getElementById("errorCode").innerHTML = error.getErrorCode();
+                //document.getElementById("errorMessage").innerHTML = error.getErrorMessage();
+            }
+          });
+      }
+    </script>
+    <script type="text/javascript"
+      src="https://static-fe.payments-amazon.com/OffAmazonPayments/jp/sandbox/lpa/js/Widgets.js"
+       async></script>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  </body>
+
+</html>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0"/>
+    <title>Confirmation - Amazon Pay Demo Shop</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/shop-confirmation.css" rel="stylesheet">
+    <script type='text/javascript'>
+      function getURLParameter(name, source) {
+          return decodeURIComponent((new RegExp('[?|&amp;|#]' + name + '=' +
+                          '([^&;]+?)(&|#|;|$)').exec(source) || [, ""])[1].replace(/\+/g, '%20')) || null;
+      }
+
+      var error = getURLParameter("error", location.search);
+      if (typeof error === 'string' && error.match(/^access_denied/)) {
+        console.log('Amazonアカウントでのサインインをキャンセルされたため、戻る');
+        window.location.href = 'shop-cart.html';
+      }
+    </script>
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="#">Amazon Pay Demo Shop</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Home
+                <span class="sr-only">(current)</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Services</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Contact</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+      <div class="row">
+
+        <!-- Blog Entries Column -->
+        <div class="col-md-8">
+
+          <h1 class="my-4">ご注文手続き</h1>
+
+          <!-- Blog Post -->
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5>お届け先・お支払い方法の選択</h5>
+              <div id="addressBookWidgetDiv" style="height:250px"></div>
+              <div id="walletWidgetDiv" style="height:250px"></div>
+            </div>
+          </div>
+
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5 class="card-title">お客様情報</h5>
+              <p>Amazon 太郎</p>
+              <p>amazonpay@amazon.co.jp</p>
+              <p>153-0064</p>
+              <p>東京都目黒区下目黒1-8-1</p>
+              <p>03-XXXX-XXXX</p>
+              <button class="btn btn-secondary float-right">変更</button>
+            </div>
+          </div>
+
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5 class="card-title">配送方法</h5>
+              <button class="btn btn-secondary float-right">変更</button>
+            </div>
+          </div>
+
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5 class="card-title">ご注文内容</h5>
+              <table class="table table-striped">
+                  <thead>
+                      <tr>
+                          <th scope="col"> </th>
+                          <th scope="col">商品名</th>
+                          <th scope="col">単価(税込)</th>
+                          <th scope="col" class="text-center">数量</th>
+                          <th scope="col" class="text-right">小計</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr>
+                          <td><img src="https://dummyimage.com/50x50/55595c/fff" /> </td>
+                          <td>Sample1</td>
+                          <td class="text-right">￥2,000</td>
+                          <td class="text-right">1</td>
+                          <td class="text-right">￥2,000</td>
+                      </tr>
+                      <tr>
+                          <td><img src="https://dummyimage.com/50x50/55595c/fff" /> </td>
+                          <td>Sample2</td>
+                          <td class="text-right">￥500</td>
+                          <td class="text-right">1</td>
+                          <td class="text-right">￥500</td>
+                      </tr>
+                  </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Sidebar Widgets Column -->
+        <div class="col-md-4">
+
+          <!-- Side Widget -->
+          <div class="card my-4">
+            <h5 class="card-header">お支払い金額</h5>
+            <div class="card-body">
+
+              <table class="table table-striped">
+                  <tbody>
+                      <tr>
+                          <td>商品合計</td>
+                          <td class="text-right">￥2,000</td>
+                      </tr>
+                      <tr>
+                          <td>送料</td>
+                          <td class="text-right">￥500</td>
+                      </tr>
+                      <tr>
+                          <td><strong>総合計</strong></td>
+                          <td class="text-right"><strong>￥3,000</strong></td>
+                      </tr>
+                  </tbody>
+              </table>
+
+              <div class="checkbox">
+                  <label>
+                      <input type="checkbox" checked/> お客様情報を会員として登録する
+                  </label>
+              </div>
+
+              <div class="checkbox">
+                  <label>
+                      <input type="checkbox" checked/> メールマガジンを購読する
+                  </label>
+              </div>
+
+              <button type="submit" class="btn btn-info btn-lg btn-block">ご注文を確定する</button>
+
+              </br>
+
+              <div>
+                  <label>
+                      <p>※Demoサイトです</p>
+                      <p>※会員登録・課金はされません</p>
+                  </label>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+      <!-- /.row -->
+
+    </div>
+    <!-- /.container -->
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; Amazon Pay 2018</p>
+      </div>
+      <!-- /.container -->
+    </footer>
+
+    <!-- Amazon Pay JavaScript -->
+    <script type='text/javascript'>
+      window.onAmazonLoginReady = function() {
+        amazon.Login.setClientId("amzn1.application-oa2-client.6827941495a24987b010d42bc906291b");
+      };
+
+      window.onAmazonPaymentsReady = function() {
+        showAddressBookWidget();
+
+      };
+
+      function showAddressBookWidget() {
+          // AddressBook
+          new OffAmazonPayments.Widgets.AddressBook({
+            sellerId: 'ASKZOQVR9ZZJZ',
+
+            onReady: function (orderReference) {
+                var orderReferenceId = orderReference.getAmazonOrderReferenceId();
+                var el;
+                if ((el = document.getElementById("orderReferenceId"))) {
+                  el.value = orderReferenceId;
+                }
+                // Wallet
+                showWalletWidget(orderReferenceId);
+            },
+            onAddressSelect: function (orderReference) {
+                // お届け先の住所が変更された時に呼び出されます、ここで手数料などの再計算ができます。
+            },
+            design: {
+                designMode: 'responsive'
+            },
+            onError: function (error) {
+                // エラー処理
+                // エラーが発生した際にonErrorハンドラーを使って処理することをお勧めします。
+                // @see https://payments.amazon.com/documentation/lpwa/201954960
+                console.log('OffAmazonPayments.Widgets.AddressBook', error.getErrorCode(), error.getErrorMessage());
+                switch (error.getErrorCode()) {
+                  case 'AddressNotModifiable':
+                      // オーダーリファレンスIDのステータスが正しくない場合は、お届け先の住所を変更することができません。
+                      break;
+                  case 'BuyerNotAssociated':
+                      // 購入者とリファレンスIDが正しく関連付けられていません。
+              　　　    // ウィジェットを表示する前に購入者はログインする必要があります。
+                      break;
+                  case 'BuyerSessionExpired':
+                      // 購入者のセッションの有効期限が切れました。
+         　　　　        // ウィジェットを表示する前に購入者はログインする必要があります。
+                      break;
+                  case 'InvalidAccountStatus':
+                      // マーチャントID（セラーID）がリクエストを実行する為に適切な状態ではありません。
+        　　　　         // 考えられる理由 ： 制限がかかっているか、正しく登録が完了されていません。
+                      break;
+                  case 'InvalidOrderReferenceId':
+                      // オーダーリファレンスIDが正しくありません。
+                      break;
+                  case 'InvalidParameterValue':
+                      // 指定されたパラメータの値が正しくありません。
+                      break;
+                  case 'InvalidSellerId':
+                      // マーチャントID（セラーID）が正しくありません。
+                      break;
+                  case 'MissingParameter':
+                      // 指定されたパラメータが正しくありません。
+                      break;
+                  case 'PaymentMethodNotModifiable':
+                      // オーダーリファレンスIDのステータスが正しくない場合はお支払い方法を変更することができません。
+                      break;
+                  case 'ReleaseEnvironmentMismatch':
+                      // 使用しているオーダーリファレンスオブジェクトがリリース環境と一致しません。
+                      break;
+                  case 'StaleOrderReference':
+                      // 使用しているオーダーリファレンスIDがキャンセルされています。
+                  　　　// キャンセルされたオーダーリファレンスIDでウィジェットを関連付けすることはできません。
+                      break;
+                  case 'UnknownError':
+                      // 不明なエラーが発生しました。(UnknownError)
+                      break;
+                  default:
+                      // 不明なエラーが発生しました。
+                }
+            }
+          }).bind("addressBookWidgetDiv");
+      }
+
+      function showWalletWidget(orderReferenceId) {
+          // Wallet
+          new OffAmazonPayments.Widgets.Wallet({
+            sellerId: 'ASKZOQVR9ZZJZ',
+            amazonOrderReferenceId: orderReferenceId,
+            onReady: function(orderReference) {
+                console.log(orderReference.getAmazonOrderReferenceId());
+            },
+            onPaymentSelect: function() {
+                console.log(arguments);
+            },
+            design: {
+                designMode: 'responsive'
+            },
+            onError: function(error) {
+                // エラー処理
+                // エラーが発生した際にonErrorハンドラーを使って処理することをお勧めします。
+                // @see https://payments.amazon.com/documentation/lpwa/201954960
+                console.log('OffAmazonPayments.Widgets.Wallet', error.getErrorCode(), error.getErrorMessage());
+            }
+          }).bind("walletWidgetDiv");
+      }
+
+    </script>
+    <script type="text/javascript"
+      src="https://static-fe.payments-amazon.com/OffAmazonPayments/jp/sandbox/lpa/js/Widgets.js"
+       async></script>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  </body>
+
+</html>
