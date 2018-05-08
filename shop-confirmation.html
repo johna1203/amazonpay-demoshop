@@ -203,7 +203,7 @@
     <!-- Amazon Pay JavaScript -->
     <script type='text/javascript'>
       window.onAmazonLoginReady = function() {
-        amazon.Login.setClientId("amzn1.application-oa2-client.6827941495a24987b010d42bc906291b");
+        amazon.Login.setClientId("amzn1.application-oa2-client.5e1a4059588e47909368d628ba92eb5a");
       };
 
       window.onAmazonPaymentsReady = function() {
@@ -214,7 +214,7 @@
       function showAddressBookWidget() {
           // AddressBook
           new OffAmazonPayments.Widgets.AddressBook({
-            sellerId: 'ASKZOQVR9ZZJZ',
+            sellerId: 'AQRSI3JZA9TID',
 
             onReady: function (orderReference) {
                 var orderReferenceId = orderReference.getAmazonOrderReferenceId();
@@ -287,7 +287,7 @@
       function showWalletWidget(orderReferenceId) {
           // Wallet
           new OffAmazonPayments.Widgets.Wallet({
-            sellerId: 'ASKZOQVR9ZZJZ',
+            sellerId: 'AQRSI3JZA9TID',
             amazonOrderReferenceId: orderReferenceId,
             onReady: function(orderReference) {
                 console.log(orderReference.getAmazonOrderReferenceId());
@@ -309,7 +309,7 @@
 
     </script>
     <script type="text/javascript"
-      src="https://static-fe.payments-amazon.com/OffAmazonPayments/jp/sandbox/lpa/js/Widgets.js"
+      src="https://static-fe.payments-amazon.com/OffAmazonPayments/jp/lpa/js/Widgets.js"
        async></script>
 
     <!-- Bootstrap core JavaScript -->
