@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Item - Amazon Pay Demo Shop</title>
+    <title>商品ページ：マメヨコーヒー（Amazon Payのデモショッピングサイト）</title>
 
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -23,22 +23,19 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div class="container">
-        <a class="navbar-brand" href="#">Amazon Pay Demo Shop</a>
+        <a class="navbar-brand" href="shop-item.html">(DEMO) マメヨコーヒー</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="#">Home
+              <a class="nav-link" href="shop-item.html">Top
                 <span class="sr-only">(current)</span>
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">About</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Services</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Contact</a>
@@ -56,9 +53,9 @@
         <div class="col-lg-3">
           <h1 class="my-4">カテゴリー</h1>
           <div class="list-group">
-            <a href="#" class="list-group-item active">Category 1</a>
-            <a href="#" class="list-group-item">Category 2</a>
-            <a href="#" class="list-group-item">Category 3</a>
+            <a href="#" class="list-group-item active">コーヒー豆</a>
+            <a href="#" class="list-group-item">コーヒー器具</a>
+            <a href="#" class="list-group-item">コーヒーカップ</a>
           </div>
         </div>
         <!-- /.col-lg-3 -->
@@ -66,9 +63,9 @@
         <div class="col-lg-9">
 
           <div class="card mt-4">
-            <img class="card-img-top img-fluid" src="http://placehold.it/900x400" alt="">
+            <img class="card-img-top img-fluid" src="image/sample1.jpg" alt="">
             <div class="card-body">
-              <h3 class="card-title">Sample1</h3>
+              <h3 class="card-title">コロンビア・ビルバオ　コーヒー豆</h3>
               <h4>¥2,000</h4>
               </br>
 
@@ -95,7 +92,7 @@
 
                 <div class="form-group">
                   <div class="offset-md-8 col-md-4 col-xs-12">
-                    <button type="submit" class="btn btn-info btn-lg btn-block">この商品を購入する</button>
+                    <button type="submit" class="btn btn-info btn-lg btn-block" data-toggle="tooltip" data-placement="top" data-html="true" title="<p>このサイトでは、Amazon Payが実現する簡単・安心な決済をお客様の立場から体験できます。</p><p>まずは、この商品ページの「この商品を購入する」ボタンからショッピングカート画面へお進みください。</p><p>※デモショッピングサイトですので実際には注文されません。</p>">この商品を購入する</button>
                   </div>
                 </div>
             　</form>
@@ -140,11 +137,33 @@
     </footer>
 
     <!-- Bootstrap core JavaScript -->
+
     <script src="vendor/jquery/jquery.min.js"></script>
+        <script src="vendor/bootstrap/js/popper.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- omniture -->
     <script>
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip(
+      		{
+      			trigger: 'manual'
+      		}
+        ).tooltip('show')
+        .on(
+        	'mouseenter',
+        	function() {
+        		$(this).tooltip('hide');
+        	}
+        )
+        .on(
+        	'mouseleave',
+        	function() {
+        		$(this).tooltip('show');
+        	}
+        );
+      });
+
       var s_account = 'amznpaymentsjpprod';
     </script>
     <script src="https://images-na.ssl-images-amazon.com/images/G/01/EPSMarketingJRubyWebsite/assets/3/javascripts/s-code-2014-06-18.e68c1f20.js"></script>

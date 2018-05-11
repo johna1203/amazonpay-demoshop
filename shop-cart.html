@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Cart - Amazon Pay Demo Shop</title>
+    <title>ショッピングカート：マメヨコーヒー（Amazon Payのデモショッピングサイト）</title>
 
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -29,22 +29,17 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div class="container">
-        <a class="navbar-brand" href="#">Amazon Pay Demo Shop</a>
+        <a class="navbar-brand" href="shop-item.html">(DEMO) マメヨコーヒー</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="#">Home
-                <span class="sr-only">(current)</span>
-              </a>
+            <li class="nav-item">
+              <a class="nav-link" href="shop-item.html">Top</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">About</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Services</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Contact</a>
@@ -87,16 +82,16 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td><img src="https://dummyimage.com/50x50/55595c/fff" /> </td>
-                        <td>Sample1</td>
+                        <td><img class="cart-item" src="image/sample1.jpg" /> </td>
+                        <td>コロンビア・ビルバオ コーヒー豆</td>
                         <td class="text-right">￥2,000</td>
                         <td><input class="form-control" type="text" value="1" /></td>
                         <td class="text-right">￥2,000</td>
                         <td class="text-right"><button class="btn btn-sm btn-secondary">削除</button> </td>
                     </tr>
                     <tr>
-                        <td><img src="https://dummyimage.com/50x50/55595c/fff" /> </td>
-                        <td>Sample2</td>
+                        <td><img class="cart-item" src="image/sample2.jpg" /> </td>
+                        <td>コーヒーカップ</td>
                         <td class="text-right">￥500</td>
                         <td><input class="form-control" type="text" value="1" /></td>
                         <td class="text-right">￥500</td>
@@ -151,10 +146,26 @@
 
           <div class="col-lg-4 col-md-6 mb-4">
             <div class="card h-100">
-              <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+              <a href="#"><img class="card-img-top" src="image/recommend1.jpg" alt=""></a>
               <div class="card-body">
                 <h4 class="card-title">
-                  <a href="#">導入事例などをいれてみては？</a>
+                  <a href="#">Sample3</a>
+                </h4>
+                <h5>￥1,000</h5>
+                <p class="card-text">コーヒーミル(手挽き)</p>
+              </div>
+              <div class="card-footer">
+                <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+              <a href="#"><img class="card-img-top" src="image/recommend2.jpg" alt=""></a>
+              <div class="card-body">
+                <h4 class="card-title">
+                  <a href="#">Sample4</a>
                 </h4>
                 <h5>￥1,000</h5>
                 <p class="card-text">テスト</p>
@@ -167,10 +178,10 @@
 
           <div class="col-lg-4 col-md-6 mb-4">
             <div class="card h-100">
-              <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+              <a href="#"><img class="card-img-top" src="image/recommend3.jpg" alt=""></a>
               <div class="card-body">
                 <h4 class="card-title">
-                  <a href="#">Item One</a>
+                  <a href="#">Sample5</a>
                 </h4>
                 <h5>￥1,000</h5>
                 <p class="card-text">テスト</p>
@@ -183,10 +194,10 @@
 
           <div class="col-lg-4 col-md-6 mb-4">
             <div class="card h-100">
-              <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+              <a href="#"><img class="card-img-top" src="image/recommend4.jpg" alt=""></a>
               <div class="card-body">
                 <h4 class="card-title">
-                  <a href="#">Item One</a>
+                  <a href="#">Sample6</a>
                 </h4>
                 <h5>￥1,000</h5>
                 <p class="card-text">テスト</p>
@@ -199,10 +210,10 @@
 
           <div class="col-lg-4 col-md-6 mb-4">
             <div class="card h-100">
-              <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+              <a href="#"><img class="card-img-top" src="image/recommend5.jpg" alt=""></a>
               <div class="card-body">
                 <h4 class="card-title">
-                  <a href="#">Item One</a>
+                  <a href="#">Sample7</a>
                 </h4>
                 <h5>￥1,000</h5>
                 <p class="card-text">テスト</p>
@@ -215,26 +226,10 @@
 
           <div class="col-lg-4 col-md-6 mb-4">
             <div class="card h-100">
-              <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+              <a href="#"><img class="card-img-top" src="image/recommend6.jpg" alt=""></a>
               <div class="card-body">
                 <h4 class="card-title">
-                  <a href="#">Item One</a>
-                </h4>
-                <h5>￥1,000</h5>
-                <p class="card-text">テスト</p>
-              </div>
-              <div class="card-footer">
-                <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card h-100">
-              <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
-              <div class="card-body">
-                <h4 class="card-title">
-                  <a href="#">Item One</a>
+                  <a href="#">Sample8</a>
                 </h4>
                 <h5>￥1,000</h5>
                 <p class="card-text">テスト</p>
