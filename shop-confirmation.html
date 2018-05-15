@@ -197,8 +197,29 @@
 
     <!-- Amazon Pay JavaScript -->
     <script type='text/javascript'>
+    // get access token
+    function getURLParameter(name, source) {
+        return decodeURIComponent((new RegExp('[?|&amp;|#]' + name + '=' +
+                        '([^&;]+?)(&|#|;|$)').exec(source) || [, ""])[1].replace(/\+/g, '%20')) || null;
+    }
+
+    var accessToken = getURLParameter("access_token", location.href);
+    if (typeof accessToken === 'string' && accessToken.match(/^Atza/)) {
+        document.cookie = "amazon_Login_accessToken=" + accessToken + ";path=/;secure";
+    }
+
       window.onAmazonLoginReady = function() {
         amazon.Login.setClientId("amzn1.application-oa2-client.5e1a4059588e47909368d628ba92eb5a");
+
+        if (accessToken) {
+          amazon.Login.retrieveProfile(accessToken, function (response){
+            if (response.success) {
+              console.log("Amazon Account Name :" + response.profile.Name);
+              console.log("Amazon Account Mail :" + response.profile.PrimaryEmail);
+              console.log("Amazon UserId :" + response.profile.CustomerId);
+            }
+          });
+        }
       };
 
       window.onAmazonPaymentsReady = function() {
@@ -230,7 +251,7 @@
                 // エラー処理
                 // エラーが発生した際にonErrorハンドラーを使って処理することをお勧めします。
                 // @see https://payments.amazon.com/documentation/lpwa/201954960
-                console.log('OffAmazonPayments.Widgets.AddressBook', error.getErrorCode(), error.getErrorMessage());
+                //console.log('OffAmazonPayments.Widgets.AddressBook', error.getErrorCode(), error.getErrorMessage());
                 switch (error.getErrorCode()) {
                   case 'AddressNotModifiable':
                       // オーダーリファレンスIDのステータスが正しくない場合は、お届け先の住所を変更することができません。
