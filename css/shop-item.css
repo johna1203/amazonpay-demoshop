@@ -13,3 +13,11 @@ body {
     padding-top: 56px;
   }
 }
+
+#text-black {
+  color:black;
+}
+
+#text-red {
+  color:red;
+}
