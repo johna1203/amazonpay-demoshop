@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>商品ページ：マメヨコーヒー（Amazon Payのデモショッピングサイト）</title>
+    <title>商品ページ：密林コーヒー Amazon Payデモサイト</title>
 
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -23,7 +23,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div class="container">
-        <a class="navbar-brand" href="shop-item.html">(DEMO) マメヨコーヒー</a>
+        <a class="navbar-brand" href="shop-item.html">密林コーヒー：デモサイト</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -48,54 +48,56 @@
     <!-- Page Content -->
     <div class="container">
 
-      <div class="row">
-
-        <div class="col-lg-3">
-          <h1 class="my-4">カテゴリー</h1>
-          <div class="list-group">
-            <a href="#" class="list-group-item active">コーヒー豆</a>
-            <a href="#" class="list-group-item">コーヒー器具</a>
-            <a href="#" class="list-group-item">コーヒーカップ</a>
-          </div>
-        </div>
-        <!-- /.col-lg-3 -->
-
-        <div class="col-lg-9">
+        <div class="col-lg-12">
 
           <div class="card mt-4">
-            <img class="card-img-top img-fluid" src="image/sample1.jpg" alt="">
             <div class="card-body">
-              <h3 class="card-title">コロンビア・ビルバオ　コーヒー豆</h3>
-              <h4>¥2,000</h4>
-              </br>
-
-              <p class="card-text">こちらは、Amazon Payのデモサイトです。</p>
-              <p class="card-text">ECサイトへのAmazon Payを導入すると、どのような購入プロセスになるのかご確認いただけます。</p>
-              <p class="card-text">「この商品を購入する」ボタンを押し、次の購入プロセスへ進んでください。</p>
-
-              </br>
-
-              <span>この商品の平均評価：</span><span class="text-warning">&#9733; &#9733; &#9733; &#9733; &#9734;</span><span>　4.0</span>
-              </br>
-
-              <form action="shop-cart.html" class="form-horizontal">
-
-                <div class="form-group">
-                  <label class="offset-md-8 col-md-4 control-label">数量</label>
-                  <div class="offset-md-8 col-md-4 col-xs-12">
-                    <select class="form-control">
-                      <option value="1" selected="selected">1</option>
-                      <option value="2">2</option>
-                    </select>
-                  </div>
+              <div class="row">
+                <div class="col-lg-4">
+                  <img class="card-img-top img-fluid" src="image/sample1.jpg" alt="">
                 </div>
 
-                <div class="form-group">
-                  <div class="offset-md-8 col-md-4 col-xs-12">
-                    <button type="submit" class="btn btn-info btn-lg btn-block" data-toggle="tooltip" data-placement="top" data-html="true" title="<p>このサイトでは、Amazon Payが実現する簡単・安心な決済をお客様の立場から体験できます。</p><p>まずは、この商品ページの「この商品を購入する」ボタンからショッピングカート画面へお進みください。</p><p>※デモショッピングサイトですので実際には注文されません。</p>">この商品を購入する</button>
-                  </div>
+                <div class="col-lg-5">
+                  <h3>コーヒー豆</h3>
+                  <h3 class="card-title">コロンビア・ビルバオ</h3>
+                  <h4>¥2,000</h4>
+                  </br>
+
+                  <p class="card-text">こちらは、Amazon Payのデモサイトです。</p>
+                  <p class="card-text">ECサイトへのAmazon Payを導入すると、どのような購入プロセスになるのかご確認いただけます。</p>
+                  <p class="card-text">「この商品を購入する」ボタンを押し、次の購入プロセスへ進んでください。</p>
+
+                  </br>
+
+                  <span>この商品の平均評価：</span><span class="text-warning">&#9733; &#9733; &#9733; &#9733; &#9734;</span><span>　4.0</span>
+                  </br>
                 </div>
-            　</form>
+
+                <div class="col-lg-3">
+                  <form action="shop-cart.html" class="form-horizontal">
+
+                    <div class="form-group">
+                      <div class="row">
+                      <div class="offset-lg-1 col-lg-3">
+                        <label class="control-label">数量:</label>
+                      </div>
+                      <div class="col-lg-7">
+                        <select class="form-control">
+                          <option value="1" selected="selected">1</option>
+                          <option value="2">2</option>
+                        </select>
+                      </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <div class="offset-md-12 col-md-12 col-xs-12">
+                        <button type="submit" class="btn btn-info btn-lg btn-block" data-toggle="tooltip" data-placement="top" data-html="true" title="<p>このサイトでは、Amazon Payが実現する簡単・安心な決済をお客様の立場から体験できます。</p><p>まずは、この商品ページの「この商品を購入する」ボタンからショッピングカート画面へお進みください。</p><p>※デモショッピングサイトですので実際には注文されません。</p>">カートにいれる</button>
+                      </div>
+                    </div>
+                　</form>
+                </div>
+              </div>
 
             </div>
           </div>
@@ -106,14 +108,14 @@
               商品レビュー
             </div>
             <div class="card-body">
-              <p>テスト・テスト・テスト・テスト・テスト</p>
-              <small class="text-muted">Posted by Anonymous on 3/1/17</small>
+              <p>非常に美味しくいただきました！また買います！</p>
+              <small class="text-muted">Posted by Anonymous on 5/16/18</small>
               <hr>
-              <p>テスト・テスト・テスト・テスト・テスト</p>
-              <small class="text-muted">Posted by Anonymous on 3/1/17</small>
+              <p>期待通りの香りでした！ありがとうございます。</p>
+              <small class="text-muted">Posted by Anonymous on 5/1/18</small>
               <hr>
-              <p>テスト・テスト・テスト・テスト・テスト</p>
-              <small class="text-muted">Posted by Anonymous on 3/1/17</small>
+              <p>簡単に注文でき、迅速な配送もいただきました。ありがとうございます。</p>
+              <small class="text-muted">Posted by Anonymous on 4/25/18</small>
               <hr>
               <a href="#" class="btn btn-success">すべてのレビューを見る</a>
             </div>
@@ -121,9 +123,7 @@
           <!-- /.card -->
 
         </div>
-        <!-- /.col-lg-9 -->
-
-      </div>
+        <!-- /.col-lg-12 -->
 
     </div>
     <!-- /.container -->
