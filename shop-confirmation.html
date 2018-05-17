@@ -66,7 +66,7 @@
           <h1 class="my-4">ご注文手続き</h1>
 
           <!-- Blog Post -->
-          <div class="card mb-4">
+          <div class="card mb-4" id="highlight1" data-toggle="tooltip1" data-container="body"  data-placement="top" data-html="true" title="<p>Amazonアカウントに登録している住所、クレジットカード情報がされています。</p><p>Amazonアカウントでサインインすれば、配送先やクレジットカード情報を入力する必要はありません。</p><p>初めてECサイトでお買い物をするときも、入力の手間なく簡単かつ安全に注文いただけます。</p>">
             <div class="card-body">
               <h5>お届け先・お支払い方法の選択</h5>
               <div id="addressBookWidgetDiv" style="height:250px"></div>
@@ -154,19 +154,25 @@
                   </tbody>
               </table>
 
-              <div class="checkbox">
-                  <label>
-                      <input type="checkbox" checked/> お客様情報を会員として登録する
-                  </label>
+              <div id="highlight2">
+                <div data-toggle="tooltip2" data-container="body" data-placement="top" data-html="true" title="<p>ECサイトへの会員登録・メールマガジンの購読をすすめることもできます。</p>">
+                  <div class="checkbox">
+                      <label>
+                          <input type="checkbox" checked/> お客様情報を会員として登録する
+                      </label>
+                  </div>
+
+                  <div class="checkbox">
+                      <label>
+                          <input type="checkbox" checked/> メールマガジンを購読する
+                      </label>
+                  </div>
+                </div>
               </div>
 
-              <div class="checkbox">
-                  <label>
-                      <input type="checkbox" checked/> メールマガジンを購読する
-                  </label>
+              <div id="highlight3">
+                <button type="submit" class="btn btn-info btn-lg btn-block" data-toggle="tooltip3" data-container="body"  data-placement="top" data-html="true" title="<p>こちらをクリックして、キャンペーンのお申込みページへお進みください。</p><p id='text-underline'>※デモショッピングサイトですので実際には注文されません。</p>">ご注文を確定する</button>
               </div>
-
-              <button type="submit" class="btn btn-info btn-lg btn-block">ご注文を確定する</button>
 
               </br>
 
@@ -329,15 +335,51 @@
       src="https://static-fe.payments-amazon.com/OffAmazonPayments/jp/lpa/js/Widgets.js"
        async></script>
 
-    <!-- omniture -->
-    <script>
-      var s_account = 'amznpaymentsjpprod';
-    </script>
-    <script src="https://images-na.ssl-images-amazon.com/images/G/01/EPSMarketingJRubyWebsite/assets/3/javascripts/s-code-2014-06-18.e68c1f20.js"></script>
-
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/jquery/jquery.highlight.js"></script>
+
+    <script src="vendor/bootstrap/js/popper.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Tooltip -->
+    <script>
+    $(function () {
+      var tooltip1 = $('[data-toggle="tooltip1"]');
+      var tooltip2 = $('[data-toggle="tooltip2"]');
+      var tooltip3 = $('[data-toggle="tooltip3"]');
+      var tooltips = [tooltip1, tooltip2, tooltip3];
+
+      for(var i=0; i<tooltips.length; i++) {
+        tooltips[i].tooltip(
+          {
+            trigger: 'manual'
+          }
+        );
+      }
+
+      window.setTimeout(function(){
+          $('#highlight1').highlightOverlay();
+          window.setTimeout(function(){
+            tooltip1.tooltip('show');
+          },500);
+          window.setTimeout(function(){
+              tooltip1.tooltip('hide');
+              $('#highlight2').highlightOverlay();
+              window.setTimeout(function(){
+                tooltip2.tooltip('show');
+              },500);
+              window.setTimeout(function(){
+                  tooltip2.tooltip('hide');
+                  $('#highlight3').highlightOverlay();
+                  window.setTimeout(function(){
+                    tooltip3.tooltip('show');
+                  },500);
+              },4000);
+          },4000);
+      },1000);
+    });
+    </script>
 
   </body>
 

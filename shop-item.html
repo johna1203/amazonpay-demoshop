@@ -73,7 +73,7 @@
                   </br>
                 </div>
 
-                <div class="col-lg-4" id="highlight">
+                <div class="col-lg-4">
                   <form action="shop-cart.html" class="form-horizontal">
 
                     <div class="form-group">
@@ -91,8 +91,8 @@
                     </div>
 
                     <div class="form-group">
-                      <div class="offset-md-12 col-md-12 col-xs-12">
-                        <button type="submit" class="btn btn-info btn-lg btn-block" data-toggle="tooltip" data-container="body"  data-placement="top" data-html="true" title="<p>このサイトでは、Amazon Payが実現する簡単・安心な決済をお客様の立場から体験できます。</p><p>まずは、この商品ページの「この商品を購入する」ボタンからショッピングカート画面へお進みください。</p><p id='text-underline'>※デモショッピングサイトですので実際には注文されません。</p>">カートにいれる</button>
+                      <div class="offset-md-12 col-md-12 col-xs-12" id="highlight">
+                        <button type="submit" class="btn btn-info btn-lg btn-block" data-toggle="tooltip" data-container="body"  data-placement="bottom" data-html="true" title="<p>このサイトでは、Amazon Payが実現する簡単・安心な決済をお客様の立場から体験できます。</p><p>まずは、こちらからショッピングカートへお進みください。</p><p id='text-underline'>※デモサイトですので、実際に注文されません。</p>">カートにいれる</button>
                       </div>
                     </div>
                 　</form>
@@ -144,29 +144,33 @@
     <script src="vendor/bootstrap/js/popper.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <!-- omniture -->
+    <!-- Tooltip -->
     <script>
-      $(function () {
-        $('[data-toggle="tooltip"]').tooltip(
-      		{
-      			trigger: 'manual'
-      		}
-        ).tooltip('show')
-        .on(
-        	'mouseenter',
-        	function() {
-        		$(this).tooltip('hide');
-        	}
-        )
-        .on(
-        	'mouseleave',
-        	function() {
-        		$(this).tooltip('show');
-        	}
-        );
+    $(function () {
+      window.setTimeout(function(){
+          $('#highlight').highlightOverlay();
 
-        $('#highlight').highlightOverlay();
-      });
+          window.setTimeout(function(){
+            $('[data-toggle="tooltip"]').tooltip(
+              {
+                trigger: 'manual'
+              }
+            ).tooltip('show')
+            .on(
+              'mouseenter',
+              function() {
+                $(this).tooltip('hide');
+              }
+            )
+            .on(
+              'mouseleave',
+              function() {
+                $(this).tooltip('show');
+              }
+            );
+          },500);
+      },1400);
+    });
     </script>
 
   </body>

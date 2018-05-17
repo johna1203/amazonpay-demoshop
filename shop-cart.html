@@ -126,7 +126,7 @@
               <br>
               <p>Amazonアカウントをお持ちの方</p>
 
-              <div style="text-align: center; border: 1px solid #bbb;border-radius: 3px;padding:1px;margin:1px;"><div id="AmazonPayButton"></div><label style="font-size: 14px;line-height: 23px;">Amazonアカウントにご登録の住所・クレジットカード情報を利用して、簡単にご注文が出来ます。<br></label></div>
+              <div id="highlight" style="text-align: center; border: 1px solid #bbb;border-radius: 3px;padding:1px;margin:1px;"><div data-toggle="tooltip" data-container="body"  data-placement="bottom" data-html="true" title="<p>こちらをクリックしてください。</p><p>クリック後、ポップアップウィンドウが開きますので、ご自身のAmazonアカウントでサインインしてください。</p><p id='text-underline'>※デモサイトですので、実際には注文されません。</p>" id="AmazonPayButton"></div><label style="font-size: 14px;line-height: 23px;">Amazonアカウントにご登録の住所・クレジットカード情報を利用して、簡単にご注文が出来ます。<br></label></div>
 
               <br>
               <p>会員登録せずに購入する方</p>
@@ -294,15 +294,39 @@
 
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/jquery/jquery.highlight.js"></script>
+
+    <script src="vendor/bootstrap/js/popper.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-
-    <!-- omniture -->
+    <!-- Tooltip -->
     <script>
-      var s_account = 'amznpaymentsjpprod';
-    </script>
-    <script src="https://images-na.ssl-images-amazon.com/images/G/01/EPSMarketingJRubyWebsite/assets/3/javascripts/s-code-2014-06-18.e68c1f20.js"></script>
+    $(function () {
+      window.setTimeout(function(){
+          $('#highlight').highlightOverlay();
 
+          window.setTimeout(function(){
+            $('[data-toggle="tooltip"]').tooltip(
+              {
+                trigger: 'manual'
+              }
+            ).tooltip('show')
+            .on(
+              'mouseenter',
+              function() {
+                $(this).tooltip('hide');
+              }
+            )
+            .on(
+              'mouseleave',
+              function() {
+                $(this).tooltip('show');
+              }
+            );
+          },1000);
+      },1400);
+    });
+    </script>
 
   </body>
 
