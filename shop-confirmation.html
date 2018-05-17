@@ -385,11 +385,15 @@
                       function() {
                         $(this).tooltip('show');
                       }
-                    );Z
+                    );
                   },500);
               },4000);
           },4000);
       },2500);
+    });
+
+    $(window).scroll(function() {
+      $.dismissHighlightOverlay();
     });
     </script>
 
