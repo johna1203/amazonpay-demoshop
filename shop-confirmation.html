@@ -66,7 +66,7 @@
           <h1 class="my-4">ご注文手続き</h1>
 
           <!-- Blog Post -->
-          <div class="card mb-4" id="highlight1" data-toggle="tooltip1" data-container="body"  data-placement="top" data-html="true" title="<p>Amazonアカウントに登録している住所、クレジットカード情報がされています。</p><p>Amazonアカウントでサインインすれば、配送先やクレジットカード情報を入力する必要はありません。</p><p>初めてECサイトでお買い物をするときも、入力の手間なく簡単かつ安全に注文いただけます。</p>">
+          <div class="card mb-4" id="highlight1" data-toggle="tooltip1" data-container="body"  data-placement="left" data-html="true" title="<p>Amazonアカウントに登録している住所、クレジットカード情報がされています。</p><p>Amazonアカウントでサインインすれば、配送先やクレジットカード情報を入力する必要はありません。</p><p>初めてECサイトでお買い物をするときも、入力の手間なく簡単かつ安全に注文いただけます。</p>">
             <div class="card-body">
               <h5>お届け先・お支払い方法の選択</h5>
               <div id="addressBookWidgetDiv" style="height:250px"></div>
@@ -171,7 +171,7 @@
               </div>
 
               <div id="highlight3">
-                <button type="submit" class="btn btn-info btn-lg btn-block" data-toggle="tooltip3" data-container="body"  data-placement="top" data-html="true" title="<p>こちらをクリックして、キャンペーンのお申込みページへお進みください。</p><p id='text-underline'>※デモショッピングサイトですので実際には注文されません。</p>">ご注文を確定する</button>
+                <button type="submit" class="btn btn-info btn-lg btn-block" data-toggle="tooltip3" data-container="body"  data-placement="bottom" data-html="true" title="<p>こちらをクリックして、キャンペーンのお申込みページへお進みください。</p><p id='text-underline'>※デモショッピングサイトですので実際には注文されません。</p>">ご注文を確定する</button>
               </div>
 
               </br>
@@ -373,7 +373,19 @@
                   tooltip2.tooltip('hide');
                   $('#highlight3').highlightOverlay();
                   window.setTimeout(function(){
-                    tooltip3.tooltip('show');
+                    tooltip3.tooltip('show')
+                    .on(
+                      'mouseenter',
+                      function() {
+                        $(this).tooltip('hide');
+                      }
+                    )
+                    .on(
+                      'mouseleave',
+                      function() {
+                        $(this).tooltip('show');
+                      }
+                    );
                   },500);
               },4000);
           },4000);
