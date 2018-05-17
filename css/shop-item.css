@@ -14,10 +14,6 @@ body {
   }
 }
 
-#text-black {
-  color:black;
-}
-
-#text-red {
-  color:red;
+#text-underline {
+  text-decoration: underline;
 }

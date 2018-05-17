@@ -57,7 +57,7 @@
                   <img class="card-img-top img-fluid" src="image/sample1.jpg" alt="">
                 </div>
 
-                <div class="col-lg-5">
+                <div class="col-lg-4">
                   <h3>コーヒー豆</h3>
                   <h3 class="card-title">コロンビア・ビルバオ</h3>
                   <h4>¥2,000</h4>
@@ -73,7 +73,7 @@
                   </br>
                 </div>
 
-                <div class="col-lg-3">
+                <div class="col-lg-4" id="highlight">
                   <form action="shop-cart.html" class="form-horizontal">
 
                     <div class="form-group">
@@ -92,7 +92,7 @@
 
                     <div class="form-group">
                       <div class="offset-md-12 col-md-12 col-xs-12">
-                        <button type="submit" class="btn btn-info btn-lg btn-block" data-toggle="tooltip" data-placement="top" data-html="true" title="<p id='text-black'>このサイトでは、Amazon Payが実現する簡単・安心な決済をお客様の立場から体験できます。</p><p>まずは、この商品ページの「この商品を購入する」ボタンからショッピングカート画面へお進みください。</p><p id='text-red'>※デモショッピングサイトですので実際には注文されません。</p>">カートにいれる</button>
+                        <button type="submit" class="btn btn-info btn-lg btn-block" data-toggle="tooltip" data-container="body"  data-placement="top" data-html="true" title="<p>このサイトでは、Amazon Payが実現する簡単・安心な決済をお客様の立場から体験できます。</p><p>まずは、この商品ページの「この商品を購入する」ボタンからショッピングカート画面へお進みください。</p><p id='text-underline'>※デモショッピングサイトですので実際には注文されません。</p>">カートにいれる</button>
                       </div>
                     </div>
                 　</form>
@@ -139,7 +139,9 @@
     <!-- Bootstrap core JavaScript -->
 
     <script src="vendor/jquery/jquery.min.js"></script>
-        <script src="vendor/bootstrap/js/popper.min.js"></script>
+    <script src="vendor/jquery/jquery.highlight.js"></script>
+
+    <script src="vendor/bootstrap/js/popper.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- omniture -->
@@ -162,11 +164,10 @@
         		$(this).tooltip('show');
         	}
         );
-      });
 
-      var s_account = 'amznpaymentsjpprod';
+        $('#highlight').highlightOverlay();
+      });
     </script>
-    <script src="https://images-na.ssl-images-amazon.com/images/G/01/EPSMarketingJRubyWebsite/assets/3/javascripts/s-code-2014-06-18.e68c1f20.js"></script>
 
   </body>
 
