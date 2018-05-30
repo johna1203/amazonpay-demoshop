@@ -123,7 +123,7 @@
           <!-- Side Widget -->
           <div class="card my-4">
             <h5 class="card-header">お支払い金額</h5>
-            <div class="card-body">
+            <div class="card-body" id="highlight2">
 
               <table class="table table-striped">
                   <tbody>
@@ -142,7 +142,7 @@
                   </tbody>
               </table>
 
-              <div id="highlight2">
+              <div>
                 <div data-toggle="tooltip2" data-container="body" data-placement="top" data-html="true" title="<p>みなさまのECサイトへの会員登録・メールマガジンの購読をお勧めすることも可能です。</p>">
                   <div class="checkbox">
                       <label>
@@ -158,7 +158,7 @@
                 </div>
               </div>
 
-              <div id="highlight3">
+              <div>
                 <button onClick="location.href='https://pay.amazon.com/jp/form-demosite'" class="btn btn-info btn-lg btn-block" data-toggle="tooltip3" data-container="body"  data-placement="top" data-html="true" title="<p>これで注文完了です。</p><p><strong>Amazon Payが実現する簡単・安心な決済</strong>はいかがでしたでしょうか？</p><p>こちらをクリックして、キャンペーンのお申込みページへお進みください。</p><p id='text-underline'>※デモサイトのため、実際には注文されません。</p>">ご注文を確定する</button>
               </div>
 
@@ -356,7 +356,6 @@
               },500);
               window.setTimeout(function(){
                   tooltip2.tooltip('hide');
-                  $('#highlight3').highlightOverlay();
                   window.setTimeout(function(){
                     tooltip3.tooltip('show')
                     .on(
