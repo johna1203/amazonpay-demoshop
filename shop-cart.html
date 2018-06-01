@@ -259,6 +259,7 @@
     <script type='text/javascript'>
       window.onAmazonLoginReady = function() {
         amazon.Login.setClientId("amzn1.application-oa2-client.5e1a4059588e47909368d628ba92eb5a");
+        amazon.Login.setUseCookie(true); //popup=falseにときに必要
       };
 
       window.onAmazonPaymentsReady = function() {
@@ -273,7 +274,8 @@
             size:  "x-large",
 
             authorization: function() {
-              loginOptions = {scope: "profile payments:widget payments:shipping_address", popup: true};
+//              loginOptions = {scope: "profile payments:widget payments:shipping_address", popup: true};
+              loginOptions = {scope: "profile payments:widget payments:shipping_address", popup: false};
               authRequest = amazon.Login.authorize (loginOptions, "shop-confirmation.html");
             },
             onError: function(error) {

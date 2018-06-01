@@ -197,14 +197,17 @@
         return decodeURIComponent((new RegExp('[?|&amp;|#]' + name + '=' +
                         '([^&;]+?)(&|#|;|$)').exec(source) || [, ""])[1].replace(/\+/g, '%20')) || null;
     }
-
-    var accessToken = getURLParameter("access_token", location.href);
+//popup=trueにする場合
+//    var accessToken = getURLParameter("access_token", location.href);
+//popup=falseにする場合
+    var accessToken = getURLParameter("access_token", location.hash);
     if (typeof accessToken === 'string' && accessToken.match(/^Atza/)) {
         document.cookie = "amazon_Login_accessToken=" + accessToken + ";path=/;secure";
     }
 
       window.onAmazonLoginReady = function() {
         amazon.Login.setClientId("amzn1.application-oa2-client.5e1a4059588e47909368d628ba92eb5a");
+        amazon.Login.setUseCookie(true); //popup=falseにときに必要
 
         if (accessToken) {
           amazon.Login.retrieveProfile(accessToken, function (response){
