@@ -5,9 +5,12 @@
 
 [AWS Cloud9 で環境構築をしよう](#aws-cloud9-で環境構築をしよう)
 
-[PHP Buil-in server を使ってデモショップを動かそう]
+[Cloud9上デモショップを動かしてみよう](Cloud9上デモショップを動かしてみよう)
 
-PHP Buil-in server を使ってデモショップを動かそう。
+Cloud9使えない人は、localhostで PHP Built-in serverを直接動かしてください。
+
+[PHP Buil-in web server を使ってデモショップを動かそう](PHP-Buil-in-server-を使ってデモショップを動かそう)
+
 
 
 # AWS Cloud9 で環境構築をしよう
@@ -43,7 +46,6 @@ PHP Buil-in server を使ってデモショップを動かそう。
 # PHP Buil-in server を使ってデモショップを動かそう。
 
 
-
 # Cloud9上デモショップを動かしてみよう。
 
 #### 1. Run メニュから Run with の中に、PHP (built-in web server)を選択します。
@@ -63,3 +65,5 @@ PHP Buil-in server を使ってデモショップを動かそう。
 #### 4. 以下のページが現れたら成功です。
 
 ![it_works.png](assets/its_works.png)
+
+# PHP Buil-in web server を使ってデモショップを動かそう
