@@ -3,8 +3,11 @@
 この、でもショップは二つの環境で動かせるように解説していきます。
 
 
-- [AWS Cloud9 で環境構築をしよう。](#AWS にアカウントにログインして, サービスのメニューからCloud9を選択)
-- PHP Buil-in server を使ってデモショップを動かそう。
+[AWS Cloud9 で環境構築をしよう。](#AWS にアカウントにログインして, サービスのメニューからCloud9を選択)
+
+[PHP Buil-in server を使ってデモショップを動かそう](#PHP Buil-in server を使ってデモショップを動かそう)
+
+PHP Buil-in server を使ってデモショップを動かそう。
 
 
 # AWS Cloud9 で環境構築をしよう。
@@ -36,6 +39,10 @@
 #### 6. しばらくすれば、Cloud9が立ち上がります
 
 ![assets/image6.png](assets/image6.png)
+
+# PHP Buil-in server を使ってデモショップを動かそう。
+
+
 
 # Cloud9上デモショップを動かしてみよう。
 
