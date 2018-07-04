@@ -1,0 +1,7 @@
+{
+    "name": "johna1203/amazonpay-demoshop",
+    "type": "project",
+    "require": {
+        "amzn/amazon-pay-sdk-php": "^3.3"
+    }
+}

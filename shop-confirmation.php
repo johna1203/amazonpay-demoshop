@@ -1,16 +1,155 @@
+<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+require_once './vendor/autoload.php';
+
+function my_print_r($array) {
+  echo '<pre>';
+  print_r($array);
+  echo '</pre>';
+};
+
+use AmazonPay\Client as Client;
+
+$errorMessage = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  
+  $config = require_once("config/config.local.php");
+  
+  $client = new Client($config);
+  
+  //商品の合計金額
+  $amount = 3000;
+  
+  //POSTがきたので、Amazon Payの処理をします。
+  
+  //POSTパラメータからOrderReferenceIdを
+  $orderReferenceId = $_POST["orderReferenceId"];
+  $accessToken = $_POST["accessToken"];  
+  
+  try {
+    // GetOrderReferenceDetails
+    // @see https://pay.amazon.com/jp/developer/documentation/apireference/201752920
+    //
+    $params = [];
+    $params['amazon_order_reference_id'] = $orderReferenceId; 
+    $params['address_consent_token'] = $accessToken;
+    $orderReferenceDetailsResponse = $client->getOrderReferenceDetails($params);
+    $orderReferenceDetailsArray = $orderReferenceDetailsResponse->toArray();
+    if ($orderReferenceDetailsArray['ResponseStatus'] != 200)
+      throw new Exception($orderReferenceDetailsArray["Error"]["Message"]);
+
+    // my_print_r($orderReferenceDetailsArray);
+    // $orderReferenceDetails = $orderReferenceDetailsArray["GetOrderReferenceDetailsResult"]["OrderReferenceDetails"];
+
+
+    // setOrderReferenceDetailsをコールして、注文の詳細を事前に設定
+    // ここでポイントなのは、合計金額などはこちらで取得が可能です。
+    $params = [];
+    $params["amazon_order_reference_id"] = $orderReferenceId;
+    $params["amount"] = $amount;
+    $setOrderReferenceDetailsResponse = $client->setOrderReferenceDetails($params);
+    $setOrderReferenceDetailsArray = $setOrderReferenceDetailsResponse->toArray();
+    if ($setOrderReferenceDetailsArray['ResponseStatus'] != 200) 
+       throw new Exception($setOrderReferenceDetailsArray["Error"]["Message"]);
+       
+    // my_print_r($setOrderReferenceDetailsArray);
+    
+    //ConfirmOrderReferenceDetatilsを呼び出す事で注文が確定されて、
+    //OrderReferenceのStatusがOpenになります。    
+    $params = [];
+    $params["amazon_order_reference_id"] = $orderReferenceId;
+    $confirmOrderReferenceResponse = $client->confirmOrderReference($params);
+    $confirmOrderReferenceArray = $confirmOrderReferenceResponse->toArray();
+    if ($confirmOrderReferenceArray['ResponseStatus'] != 200) 
+       throw new Exception($confirmOrderReferenceArray["Error"]["Message"]);
+       
+    //注文が確定すれば、Authorize/Capture(オーソリの取得と売り上げ確定)をする準備ができた。
+    $params = [];
+    $params["amazon_order_reference_id"] = $orderReferenceId;
+    $params["authorization_amount"] = $amount;
+    $params["authorization_reference_id"] = time();
+    $params["transaction_timeout"] = 0;
+    $params["transaction_timeout"] = 0;
+    $params["capture_now"] = true;
+    $authorizeResponse = $client->authorize($params);
+    $authorizeArray = $authorizeResponse->toArray();
+    if ($authorizeArray['ResponseStatus'] != 200) 
+       throw new Exception($authorizeArray["Error"]["Message"]);
+
+    $authorizationDetails = $authorizeArray['AuthorizeResult']['AuthorizationDetails'];
+    
+    // @see https://pay.amazon.com/jp/developer/documentation/apireference/201752950
+    //オーソリが成功したかチェックをします。
+    // 今回は、CaptureNowをTrueにしたので、正常の状態は
+    // Authorize.State == Closed && MaxCapturesProcessed
+    $authorizationState = $authorizationDetails['AuthorizationStatus']['State'];
+    $authorizationStatusReasonCode = $authorizationDetails['AuthorizationStatus']['ReasonCode'];
+
+    if ($authorizationState == "Closed") {
+      
+    } 
+    else if ($authorizationState == "Open") {
+      //今回はCaptureNowでやっているので、オーソリがOpenの状態で残ることはありえません。
+      //もし、そのようなことがあればエラーなので一旦キャンセルをして再度注文をするフローでいきましょう。
+      
+      $params = [];
+      $params['amazon_order_reference_id'] = $orderReferenceId;
+      $cancelOrderReferenceResponse = $client->cancelOrderReference($params);
+      $cancelOrderReferenceArray = $cancelOrderReferenceResponse->toArray();
+      if ($cancelOrderReferenceArray['ResponseStatus'] != 200) 
+        throw new Exception($cancelOrderReferenceArray["Error"]["Message"]);
+      
+      
+      throw new Exception("CaptureNowがtrueなのに、Open状態はおかしい。");
+    } 
+    else if ($authorizationState == "Pending") {
+      
+    } 
+    else if($authorizationState == "Declined") { 
+      
+    } 
+
+
+    switch($authorizationState) {
+      case 'Declined':
+        if ($authorizationStatusReasonCode == 'AmazonRejected')
+        
+        
+        
+        break;
+      case 'Closed':
+        if ($authorizationStatusReasonCode == 'MaxCapturesProcessed') {
+          //正常にオーソリと売り上げ請求ができました。
+          //よって、ありがとうページへ移動します。
+          header("Location: shop-thanks.html");
+          exit;
+        } 
+        else {
+          throw new Exception("オーソリエラーが発生しました"); 
+        }
+        break;
+        
+    }
+    
+    
+
+
+
+    my_print_r($authorizeResponseArray);
+       
+  } catch (Exception $e) {
+    $errorMessage = $e->getMessage();
+  }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
   <head>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-120528659-1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'UA-120528659-1');
-    </script>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -74,8 +213,15 @@
 
           <h1 class="my-4">ご注文手続き</h1>
 
+          <?php if (!empty($errorMessage)) :?>
+          <div class="alert alert-danger" role="alert">
+            <p>エラーが発生しました：</p>
+            <?php echo $errorMessage;?>
+          </div>
+          <?php endif;?>
+
           <!-- Blog Post -->
-          <div class="card mb-4" id="highlight1" data-toggle="tooltip1" data-container="body"  data-placement="left" data-html="true" title="<p>このように、Amazon Payを導入したECサイトでは、Amazonアカウントに登録された住所とクレジットカード情報が表示されます。</p><p>このため、新たに配送先やクレジットカード情報を入力する必要がないため、簡単・安全にお買い物いただけます。</p>">
+          <div class="card mb-4">
             <div class="card-body">
               <h5>お届け先・お支払い方法の選択</h5>
               <div id="addressBookWidgetDiv" style="height:250px"></div>
@@ -152,7 +298,7 @@
               </table>
 
               <div>
-                <div data-toggle="tooltip2" data-container="body" data-placement="top" data-html="true" title="<p>みなさまのECサイトへの会員登録・メールマガジンの購読をお勧めすることも可能です。</p>">
+                <div>
                   <div class="checkbox">
                       <label>
                           <input type="checkbox" checked/> お客様情報を会員として登録する
@@ -168,7 +314,11 @@
               </div>
 
               <div>
-                <button onClick="location.href='https://pay.amazon.com/jp/form-demosite'" class="btn btn-info btn-lg btn-block" data-toggle="tooltip3" data-container="body"  data-placement="top" data-html="true" title="<p>これで注文完了です。</p><p><strong>Amazon Payが実現する簡単・安心な決済</strong>はいかがでしたでしょうか？</p><p>こちらをクリックして、キャンペーンのお申込みページへお進みください。</p><p id='text-underline'>※デモサイトのため、実際には注文されません。</p>">キャンペーン申込みはこちら</button>
+                <form action="<?php echo $_SERVER['PHP_SELF']?>" method="POST">
+                  <input type="text" name="orderReferenceId" id="orderReferenceId" value="" />
+                  <input type="text" name="accessToken" id="accessToken" value="" />
+                  <button type="submit" class="btn btn-block btn-success">購入</button>
+                </form>
               </div>
 
               </br>
@@ -201,29 +351,36 @@
 
     <!-- Amazon Pay JavaScript -->
     <script type='text/javascript'>
-    // get access token
-    function getURLParameter(name, source) {
-        return decodeURIComponent((new RegExp('[?|&amp;|#]' + name + '=' +
-                        '([^&;]+?)(&|#|;|$)').exec(source) || [, ""])[1].replace(/\+/g, '%20')) || null;
-    }
-//popup=trueにする場合
-//    var accessToken = getURLParameter("access_token", location.href);
-//popup=falseにする場合
-    var accessToken = getURLParameter("access_token", location.hash);
-    if (typeof accessToken === 'string' && accessToken.match(/^Atza/)) {
-        document.cookie = "amazon_Login_accessToken=" + accessToken + ";path=/;secure";
-    }
+    
+    let clientId = 'amzn1.application-oa2-client.48ecb861512f4983bfed74eb3a9a06a1'; 
+    let sellerId = 'A2MIN1OBNPVKXS';
+    
+    
+      // get access token
+      function getURLParameter(name, source) {
+          return decodeURIComponent((new RegExp('[?|&amp;|#]' + name + '=' +
+                          '([^&;]+?)(&|#|;|$)').exec(source) || [, ""])[1].replace(/\+/g, '%20')) || null;
+      }
+      //popup=trueにする場合
+      var accessToken = getURLParameter("access_token", location.href);
+      // popup=falseにする場合
+      // var accessToken = getURLParameter("access_token", location.hash);
+      // if (typeof accessToken === 'string' && accessToken.match(/^Atza/)) {
+      //     document.cookie = "amazon_Login_accessToken=" + accessToken + ";path=/;secure";
+      // }
 
       window.onAmazonLoginReady = function() {
-        amazon.Login.setClientId("amzn1.application-oa2-client.5e1a4059588e47909368d628ba92eb5a");
-        amazon.Login.setUseCookie(true); //popup=falseにときに必要
+        amazon.Login.setClientId(clientId);
+        amazon.Login.setUseCookie(false); //popup=falseにときに必要
 
         if (accessToken) {
+          document.getElementById("accessToken").value = accessToken;
           amazon.Login.retrieveProfile(accessToken, function (response){
             if (response.success) {
               console.log("Amazon Account Name :" + response.profile.Name);
               console.log("Amazon Account Mail :" + response.profile.PrimaryEmail);
               console.log("Amazon UserId :" + response.profile.CustomerId);
+              
             }
           });
         }
@@ -237,10 +394,13 @@
       function showAddressBookWidget() {
           // AddressBook
           new OffAmazonPayments.Widgets.AddressBook({
-            sellerId: 'AQRSI3JZA9TID',
+            sellerId: sellerId,
 
             onReady: function (orderReference) {
                 var orderReferenceId = orderReference.getAmazonOrderReferenceId();
+                
+                document.getElementById("orderReferenceId").value = orderReferenceId;
+                
                 // Wallet
                 showWalletWidget(orderReferenceId);
             },
@@ -306,7 +466,7 @@
       function showWalletWidget(orderReferenceId) {
           // Wallet
           new OffAmazonPayments.Widgets.Wallet({
-            sellerId: 'AQRSI3JZA9TID',
+            sellerId: sellerId,
             amazonOrderReferenceId: orderReferenceId,
             onReady: function(orderReference) {
                 console.log(orderReference.getAmazonOrderReferenceId());
@@ -329,70 +489,11 @@
     </script>
 
     <script type="text/javascript"
-      src="https://static-fe.payments-amazon.com/OffAmazonPayments/jp/lpa/js/Widgets.js"
+      src="https://static-fe.payments-amazon.com/OffAmazonPayments/jp/sandbox/lpa/js/Widgets.js"
        async></script>
 
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/jquery/jquery.highlight.js"></script>
-
-    <script src="vendor/bootstrap/js/popper.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Tooltip -->
-    <script>
-    $(function () {
-      var tooltip1 = $('[data-toggle="tooltip1"]');
-      var tooltip2 = $('[data-toggle="tooltip2"]');
-      var tooltip3 = $('[data-toggle="tooltip3"]');
-      var tooltips = [tooltip1, tooltip2, tooltip3];
-
-      for(var i=0; i<tooltips.length; i++) {
-        tooltips[i].tooltip(
-          {
-            trigger: 'manual'
-          }
-        );
-      }
-
-      window.setTimeout(function(){
-          $('#highlight1').highlightOverlay();
-          window.setTimeout(function(){
-            tooltip1.tooltip('show');
-          },500);
-          window.setTimeout(function(){
-              tooltip1.tooltip('hide');
-              $('#highlight2').highlightOverlay();
-              window.setTimeout(function(){
-                tooltip2.tooltip('show');
-              },500);
-              window.setTimeout(function(){
-                  tooltip2.tooltip('hide');
-                  window.setTimeout(function(){
-                    tooltip3.tooltip('show')
-                    .on(
-                      'mouseenter',
-                      function() {
-                        $(this).tooltip('hide');
-                      }
-                    )
-                    .on(
-                      'mouseleave',
-                      function() {
-                        $(this).tooltip('show');
-                      }
-                    );
-                  },500);
-              },4000);
-          },4000);
-      },2500);
-    });
-
-    $(window).scroll(function() {
-      $.dismissHighlightOverlay();
-    });
-    </script>
-
   </body>
 
 </html>

@@ -2,16 +2,6 @@
 <html lang="en">
 
   <head>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-120528659-1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'UA-120528659-1');
-    </script>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
@@ -25,11 +15,9 @@
     <!-- Custom styles for this template -->
     <link href="css/shop-cart.css" rel="stylesheet">
     <style type="text/css">
-    <!--
     #OffAmazonPaymentsWidgets0 {
       width: 100%;
     }
-    -->
     </style>
   </head>
 
@@ -266,9 +254,13 @@
 
     <!-- Amazon Pay JavaScript -->
     <script type='text/javascript'>
+    
+      let clientId = 'amzn1.application-oa2-client.48ecb861512f4983bfed74eb3a9a06a1'; 
+      let sellerId = 'A2MIN1OBNPVKXS';
+    
       window.onAmazonLoginReady = function() {
-        amazon.Login.setClientId("amzn1.application-oa2-client.5e1a4059588e47909368d628ba92eb5a");
-        amazon.Login.setUseCookie(true); //popup=falseにときに必要
+        amazon.Login.setClientId(clientId);
+        amazon.Login.setUseCookie(false); //popup=falseにときに必要
       };
 
       window.onAmazonPaymentsReady = function() {
@@ -277,18 +269,17 @@
 
       function showLoginButton() {
           var authRequest;
-          OffAmazonPayments.Button("AmazonPayButton", "AQRSI3JZA9TID", {
+          OffAmazonPayments.Button("AmazonPayButton", sellerId, {
             type:  "PwA",
             color: "Gold",
             size:  "x-large",
 
             authorization: function() {
-//              loginOptions = {scope: "profile payments:widget payments:shipping_address", popup: true};
-              loginOptions = {scope: "profile payments:widget payments:shipping_address", popup: false};
-              authRequest = amazon.Login.authorize (loginOptions, "shop-confirmation.html");
+              loginOptions = {scope: "profile payments:widget payments:shipping_address", popup: true};
+              // loginOptions = {scope: "profile payments:widget payments:shipping_address", popup: false};
+              authRequest = amazon.Login.authorize (loginOptions, "shop-confirmation.php");
             },
             onError: function(error) {
-                console.log('test');
                 //document.getElementById("errorCode").innerHTML = error.getErrorCode();
                 //document.getElementById("errorMessage").innerHTML = error.getErrorMessage();
             }
@@ -296,48 +287,11 @@
       }
     </script>
     <script type="text/javascript"
-      src="https://static-fe.payments-amazon.com/OffAmazonPayments/jp/lpa/js/Widgets.js"
+      src="https://static-fe.payments-amazon.com/OffAmazonPayments/jp/sandbox/lpa/js/Widgets.js"
        async></script>
 
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/jquery/jquery.highlight.js"></script>
-
-    <script src="vendor/bootstrap/js/popper.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Tooltip -->
-    <script>
-    $(function () {
-      window.setTimeout(function(){
-          $('#highlight').highlightOverlay();
-
-          window.setTimeout(function(){
-            $('[data-toggle="tooltip"]').tooltip(
-              {
-                trigger: 'manual'
-              }
-            ).tooltip('show')
-            .on(
-              'mouseenter',
-              function() {
-                $(this).tooltip('hide');
-              }
-            )
-            .on(
-              'mouseleave',
-              function() {
-                $(this).tooltip('show');
-              }
-            );
-          },1300);
-      },1800);
-
-      $(window).scroll(function() {
-        $.dismissHighlightOverlay();
-      });
-    });
-    </script>
 
   </body>
 

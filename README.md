@@ -67,3 +67,10 @@
 ![it_works.png](assets/its_works.png)
 
 # PHP Buil-in web server を使ってデモショップを動かそう
+
+
+
+# Amazon Pay の PHP SDKを入れよう。
+
+PHP のパッケージ管理を使った方が楽に導入できます。
+

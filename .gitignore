@@ -1,0 +1,5 @@
+config/*.local.php
+vendor/composer/
+vendor/autoload.php
+vendor/amzn
+composer.lock
