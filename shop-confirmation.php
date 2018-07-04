@@ -122,29 +122,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } 
 
 
-    switch($authorizationState) {
-      case 'Declined':
-        if ($authorizationStatusReasonCode == 'AmazonRejected')
-        
-        
-        
-        break;
-      case 'Closed':
-        if ($authorizationStatusReasonCode == 'MaxCapturesProcessed') {
-
-        } 
-        else {
-          throw new Exception("オーソリエラーが発生しました"); 
-        }
-        break;
-        
-    }
-    
-    
-
-
-
-    my_print_r($authorizeResponseArray);
+    // my_print_r($authorizeResponseArray);
        
   } catch (Exception $e) {
     $errorMessage = $e->getMessage();
