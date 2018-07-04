@@ -91,6 +91,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($authorizationState == "Closed") {
       
+      if ($authorizationStatusReasonCode == "MaxCapturesProcessed") {
+        //正常にオーソリと売り上げ請求ができました。
+        //よって、ありがとうページへ移動します。
+        header("Location: shop-thanks.html");
+        exit;
+      }
+      
+      
     } 
     else if ($authorizationState == "Open") {
       //今回はCaptureNowでやっているので、オーソリがOpenの状態で残ることはありえません。
@@ -123,10 +131,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         break;
       case 'Closed':
         if ($authorizationStatusReasonCode == 'MaxCapturesProcessed') {
-          //正常にオーソリと売り上げ請求ができました。
-          //よって、ありがとうページへ移動します。
-          header("Location: shop-thanks.html");
-          exit;
+
         } 
         else {
           throw new Exception("オーソリエラーが発生しました"); 

@@ -3,3 +3,4 @@ vendor/composer/
 vendor/autoload.php
 vendor/amzn
 composer.lock
+.DS_Store
