@@ -31,23 +31,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $accessToken = $_POST["accessToken"];  
   
   try {
-    // GetOrderReferenceDetails
-    // @see https://pay.amazon.com/jp/developer/documentation/apireference/201752920
+
+    //------------------------------------------------------------------------------------
+    // Step 5:注文詳細のセットと確認 1. SetOrderReferenceDetails
+    // 
+    // インテグレーションガイド
+    //   @see https://pay.amazon.com/jp/developer/documentation/lpwa/201952090
+    // 
+    // SetOrderReferenceDetails APIリファレンス
+    //   @see https://pay.amazon.com/jp/developer/documentation/apireference/201751960
     //
-    $params = [];
-    $params['amazon_order_reference_id'] = $orderReferenceId; 
-    $params['address_consent_token'] = $accessToken;
-    $orderReferenceDetailsResponse = $client->getOrderReferenceDetails($params);
-    $orderReferenceDetailsArray = $orderReferenceDetailsResponse->toArray();
-    if ($orderReferenceDetailsArray['ResponseStatus'] != 200)
-      throw new Exception($orderReferenceDetailsArray["Error"]["Message"]);
+    // 注文金額、説明、その他の注文属性などの注文の詳細をOrder Referenceに
+    // 指定するためにSetOrderReferenceDetails処理を呼び出します。
+    //
+    // SetOrderReferenceDetails API呼び出しを行います。
+    // リクエストするには、 OrderReferenceAttributesの次の属性をセットします。 
+    // 
+    // ※ 必須項目 
+    // amazon_order_reference_id  Amazon Order Reference ID
+    // amount                     Order Total（注文金額と通貨コード）
+    //------------------------------------------------------------------------------------
 
-    // my_print_r($orderReferenceDetailsArray);
-    // $orderReferenceDetails = $orderReferenceDetailsArray["GetOrderReferenceDetailsResult"]["OrderReferenceDetails"];
-
-
-    // setOrderReferenceDetailsをコールして、注文の詳細を事前に設定
-    // ここでポイントなのは、合計金額などはこちらで取得が可能です。
     $params = [];
     $params["amazon_order_reference_id"] = $orderReferenceId;
     $params["amount"] = $amount;
@@ -58,21 +62,93 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
        
     // my_print_r($setOrderReferenceDetailsArray);
     
-    //ConfirmOrderReferenceDetatilsを呼び出す事で注文が確定されて、
-    //OrderReferenceのStatusがOpenになります。    
+    //------------------------------------------------------------------------------------
+    // Step 5:注文詳細のセットと確認 2. ConfirmOrderReference
+    // 
+    // インテグレーションガイド
+    //    @see https://pay.amazon.com/jp/developer/documentation/lpwa/201952090
+    // 
+    // ConfirmOrderReference APIリファレンス
+    //    @see https://pay.amazon.com/jp/developer/documentation/apireference/201751980
+    //
+    // ConfirmOrderReference APIの呼び出しを行います。SetOrderReferenceDetails API呼び出しが成功した場合は、
+    // ConfirmOrderReference API呼び出しを行うことで、注文を確定させる事ができます。
+    //
+    // 注意なのは、注文確定
+    // ConfirmOrderReference呼び出しが成功した場合は、Order Referenceオブジェクトは Open状態になります。
+    // この時点で、Amazonからも「ご利用内容の確認」メールも送信されます。
+    //
+    // ※ 必須項目 
+    // amazon_order_reference_id  Amazon Order Reference ID
+    //------------------------------------------------------------------------------------
+  
     $params = [];
     $params["amazon_order_reference_id"] = $orderReferenceId;
     $confirmOrderReferenceResponse = $client->confirmOrderReference($params);
     $confirmOrderReferenceArray = $confirmOrderReferenceResponse->toArray();
     if ($confirmOrderReferenceArray['ResponseStatus'] != 200) 
        throw new Exception($confirmOrderReferenceArray["Error"]["Message"]);
-       
-    //注文が確定すれば、Authorize/Capture(オーソリの取得と売り上げ確定)をする準備ができた。
+    
+    //------------------------------------------------------------------------------------
+    // Step 5:注文詳細のセットと確認 3. GetOrderReferenceDetails
+    // 
+    // インテグレーションガイド
+    //   @see https://pay.amazon.com/jp/developer/documentation/lpwa/201952090
+    // 
+    // GetOrderReferenceDetails APIリファレンス
+    //   @see https://pay.amazon.com/jp/developer/documentation/apireference/201751970
+    // 
+    // Order Reference状態と理由コード
+    //   @see https://pay.amazon.com/jp/developer/documentation/apireference/201752920
+    //
+    // GetOrderReferenceDetails呼び出しを行います。
+    // Order Referenceの承認が成功した後は、最新の住所であるか確実にするために、
+    // 名前や配送先住所のような残りの購入者情報を取得するためのGetOrderReferenceDetails APIを呼び出すことができます。
+    // 
+    // ※ 必須項目 
+    // amazon_order_reference_id  Amazon Order Reference ID
+    //------------------------------------------------------------------------------------
+    
+    $params = [];
+    $params['amazon_order_reference_id'] = $orderReferenceId; 
+    // $params['access_token'] = $accessToken;
+    $orderReferenceDetailsResponse = $client->getOrderReferenceDetails($params);
+    $orderReferenceDetailsArray = $orderReferenceDetailsResponse->toArray();
+    if ($orderReferenceDetailsArray['ResponseStatus'] != 200)
+      throw new Exception($orderReferenceDetailsArray["Error"]["Message"]);
+
+    // my_print_r($orderReferenceDetailsArray);
+    // $orderReferenceDetails = $orderReferenceDetailsArray["GetOrderReferenceDetailsResult"]["OrderReferenceDetails"];
+    // my_print_r($orderReferenceDetails);
+    
+    //------------------------------------------------------------------------------------
+    // Step 6:オーソリ（Authorize）のリクエスト
+    // 
+    // インテグレーションガイド
+    //   @see https://pay.amazon.com/jp/developer/documentation/lpwa/201952140
+    // 
+    // GetOrderReferenceDetails APIリファレンス
+    //   @see https://pay.amazon.com/jp/developer/documentation/apireference/201752010
+    // 
+    // オーソリは与信確保をします。
+    // オーソリに成功した場合は、AuthorizationStatusがOpen であるオーソリオブジェクトが生成されます。
+    // ちなみに、オーソリオブジェクトは30日間 Open状態を維持します。^^
+    //
+    // ※ 必須項目 
+    // amazon_order_reference_id   Amazon Order Reference ID
+    // authorization_reference_id  システムで指定するこのオーソリトランザクションのIDです。
+    // authorization_amount        オーソリする金額
+    //
+    // ※オプションだが、今回使うパラメータ
+    // transaction_timeout         オーソリ処理を完了するまでの最大分数を割り当てます。
+    //                               (同期モードでのTransactionTimeout値は、0をセットしてください。)
+    // capture_now                 Authorizeに対して指定した金額をすぐに売上請求するか指定します。
+    //------------------------------------------------------------------------------------
+    
     $params = [];
     $params["amazon_order_reference_id"] = $orderReferenceId;
     $params["authorization_amount"] = $amount;
     $params["authorization_reference_id"] = time();
-    $params["transaction_timeout"] = 0;
     $params["transaction_timeout"] = 0;
     $params["capture_now"] = true;
     $authorizeResponse = $client->authorize($params);
@@ -82,28 +158,56 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $authorizationDetails = $authorizeArray['AuthorizeResult']['AuthorizationDetails'];
     
-    // @see https://pay.amazon.com/jp/developer/documentation/apireference/201752950
-    //オーソリが成功したかチェックをします。
-    // 今回は、CaptureNowをTrueにしたので、正常の状態は
-    // Authorize.State == Closed && MaxCapturesProcessed
-    $authorizationState = $authorizationDetails['AuthorizationStatus']['State'];
-    $authorizationStatusReasonCode = $authorizationDetails['AuthorizationStatus']['ReasonCode'];
 
-    if ($authorizationState == "Closed") {
-      
-      if ($authorizationStatusReasonCode == "MaxCapturesProcessed") {
-        //正常にオーソリと売り上げ請求ができました。
-        //よって、ありがとうページへ移動します。
-        header("Location: shop-thanks.html");
-        exit;
-      }
-      
+    //------------------------------------------------------------------------------------
+    // Step 6:オーソリ（Authorize）のリクエスト (オーソリ失敗のハンドリング)
+    // 
+    // インテグレーションガイド
+    //   @see https://pay.amazon.com/jp/developer/documentation/lpwa/201953810
+    //
+    // オーソリ状態と理由コード
+    //   @see https://pay.amazon.com/jp/developer/documentation/apireference/201752950
+    //
+    // オーソリ処理の呼び出しが失敗した場合は、レスポンス内に失敗した理由コードを確認します。
+    // 
+    // 今回は、同期モード
+    //  
+    //  Stateには、以下がある
+    //    Pending
+    //    Open
+    //    Declined
+    //    Closed
+    //------------------------------------------------------------------------------------
+
+    $authorizationState = $authorizationDetails['AuthorizationStatus']['State'];
+
+    //------------------------------------------------------------------------------------
+    // Authorization State
+    //  Pending
+    //  
+    //  同期モードでは、オーソリオブジェクトはPending状態になりません。
+    //  今回は、同期モードで実装しているので、Pendingになることはないので、Pendingなら
+    //  問題と判断して、注文をキャンセルします。
+    //------------------------------------------------------------------------------------
+    if ($authorizationState == "Pending") {
+      $params = [];
+      $params['amazon_order_reference_id'] = $orderReferenceId;
+      $cancelOrderReferenceResponse = $client->cancelOrderReference($params);
+      $cancelOrderReferenceArray = $cancelOrderReferenceResponse->toArray();
+      if ($cancelOrderReferenceArray['ResponseStatus'] != 200) 
+        throw new Exception($cancelOrderReferenceArray["Error"]["Message"]);
       
     } 
+    
+    //------------------------------------------------------------------------------------
+    // Authorization State
+    //  Open
+    //  
+    //  同期モードでは、オーソリオブジェクトはすぐにOpen状態に遷移します。
+    //  今回は、CaptureNowで即時売り上げ請求しているので、Open状態は問題の可能性がありますので
+    //  キャンセルをするします。
+    //------------------------------------------------------------------------------------
     else if ($authorizationState == "Open") {
-      //今回はCaptureNowでやっているので、オーソリがOpenの状態で残ることはありえません。
-      //もし、そのようなことがあればエラーなので一旦キャンセルをして再度注文をするフローでいきましょう。
-      
       $params = [];
       $params['amazon_order_reference_id'] = $orderReferenceId;
       $cancelOrderReferenceResponse = $client->cancelOrderReference($params);
@@ -113,13 +217,70 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       
       
       throw new Exception("CaptureNowがtrueなのに、Open状態はおかしい。");
-    } 
-    else if ($authorizationState == "Pending") {
-      
-    } 
+    }
+    
+    //------------------------------------------------------------------------------------
+    // Authorization State
+    //  Declined
+    //  
+    //  同期モードでは、オーソリオブジェクトはすぐにOpen状態に遷移します。
+    //  今回は、CaptureNowで即時売り上げ請求しているので、Open状態は問題の可能性がありますので
+    //  キャンセルをするします。
+    // - Closedには、以下の ReasonCode があります。
+    //   - InvalidPaymentMethod            支払方法に問題がありました。Soft DeclineとHard Declineを区別するためにSoftDeclineを利用します。
+    //   - AmazonRejected                  Amazonはオーソリを拒否しました。
+    //   - ProcessingFailure               Amazonは内部処理エラーのためにトランザクションを処理できませんでした。
+    //   - TransactionTimedOut             同期モードの場合は、Amazonが30秒以内にリクエストを処理できませんでした。
+    //------------------------------------------------------------------------------------    
     else if($authorizationState == "Declined") { 
+
+      $authorizationStatusReasonCode = $authorizationDetails['AuthorizationStatus']['ReasonCode'];
+
+      switch ($authorizationStatusReasonCode) {
+        case 'InvalidPaymentMethod':
+        case 'ProcessingFailure':
+        case 'TransactionTimedOut':
+          $params = [];
+          $params['amazon_order_reference_id'] = $orderReferenceId;
+          $cancelOrderReferenceResponse = $client->cancelOrderReference($params);
+          $cancelOrderReferenceArray = $cancelOrderReferenceResponse->toArray();
+          if ($cancelOrderReferenceArray['ResponseStatus'] != 200) 
+            throw new Exception($cancelOrderReferenceArray["Error"]["Message"]);
+            
+          throw new Exception("ReasonCodeがおかしいです。再度注文してください。");
+          break;
+        case 'AmazonRejected':
+          throw new Exception("決済時に問題が発生しました、別の支払い方法を試すか再度行ってください。");          
+          break;
+        default:
+            throw new Exception("予定外のReasonCode");
+          break;
+      }
+    }
+    
+    //------------------------------------------------------------------------------------
+    // Authorization State
+    //  Closed
+    //  
+    // CaptureNowをtrueに使ってオーソリをコールしたのでオーソリはClosedになります。
+    //
+    // - Closedには、以下の ReasonCode があります。
+    //   - ExpireUnused                    オーソリが30日超えてしまったので（SANDBOXでは2日間）、オーソリに対して売上請求していませんでした。
+    //   - MaxCapturesProcessed            オーソリの最大額まですでに売上請求しました。Amazonは１つのオーソリに１つの売上請求だけ認めています。
+    //   - AmazonClosed                    Amazonは販売事業者のアカウントの問題によりオーソリオブジェクトをClosedにしました。
+    //   - OrderReferenceanceled           Order Referenceがキャンセルされたのが原因で、全てのOpenのオーソリはキャンセルになりました。
+    //   - SellerClosed                    販売事業者がCloseAuthorization処理を利用して明示的にClosedにしました。
+    //   - InvalidPaymentMethod
+    //------------------------------------------------------------------------------------    
+    else if ($authorizationState == "Closed") {
       
-    } 
+      $authorizationStatusReasonCode = $authorizationDetails['AuthorizationStatus']['ReasonCode'];
+      
+      if ($authorizationStatusReasonCode == "MaxCapturesProcessed") {
+        header("Location: shop-thanks.html");
+        exit;
+      }
+    }
 
 
     // my_print_r($authorizeResponseArray);
