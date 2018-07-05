@@ -69,9 +69,12 @@
 # PHP Buil-in web server を使ってデモショップを動かそう
 
 下記のURLを参考にインストールしてみてください。
+
 https://www.granfairs.com/blog/cto/php-builtin-server
 
 
 # Amazon Pay の PHP SDKを入れよう。
 
 PHP のパッケージ管理を使った方が楽に導入できます。
+
+https://github.com/amzn/amazon-pay-sdk-php
