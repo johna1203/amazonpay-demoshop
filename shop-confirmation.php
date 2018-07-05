@@ -9,6 +9,7 @@ function my_print_r($array) {
   echo '<pre>';
   print_r($array);
   echo '</pre>';
+  exit;
 };
 
 use AmazonPay\Client as Client;
@@ -150,7 +151,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $params["authorization_amount"] = $amount;
     $params["authorization_reference_id"] = time();
     $params["transaction_timeout"] = 0;
-    $params["capture_now"] = true;
+    $params["capture_now"] = false;
     $authorizeResponse = $client->authorize($params);
     $authorizeArray = $authorizeResponse->toArray();
     if ($authorizeArray['ResponseStatus'] != 200) 
@@ -204,19 +205,64 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //  Open
     //  
     //  同期モードでは、オーソリオブジェクトはすぐにOpen状態に遷移します。
-    //  今回は、CaptureNowで即時売り上げ請求しているので、Open状態は問題の可能性がありますので
-    //  キャンセルをするします。
+    //  注意： CaptureNowで即時売り上げ請求している場合は、Open状態に継続することはない。
+    //         CaptureNowでCaptureが成功すると、AuthorizeはClosedになります。
     //------------------------------------------------------------------------------------
     else if ($authorizationState == "Open") {
+
+      //------------------------------------------------------------------------------------
+      // Step 7:売上請求（Capture）のリクエスト
+      // 
+      // インテグレーションガイド
+      //   @see https://pay.amazon.com/jp/developer/documentation/lpwa/201953080
+      //
+      // Capture状態と理由コード
+      //   @see https://pay.amazon.com/jp/developer/documentation/apireference/201753020
+      //
+      // オーソリされた支払方法から資金を売上請求します。
+      //
+      // 資金を回収するためには、本番環境モードではオーソリに成功してから30日以内に売上請求（Capture）APIを呼び出します。
+      // テスト環境モードでは2日以内です。
+      // 30日を過ぎた場合は、Amazonによってオーソリオブジェクトは Closed状態にします。
+      // 
+      //  
+      // ※ 必須項目 
+      //    amazon_authorization_id       Amazon Authorize ID
+      //    copture_reference_id          システムで指定するこのCaptureトランザクションのIDです
+      //    capture_amount                売り上げする金額
+      //------------------------------------------------------------------------------------
+      
+      $amazonAuthorizationId = $authorizationDetails['AmazonAuthorizationId'];
+      
       $params = [];
-      $params['amazon_order_reference_id'] = $orderReferenceId;
-      $cancelOrderReferenceResponse = $client->cancelOrderReference($params);
-      $cancelOrderReferenceArray = $cancelOrderReferenceResponse->toArray();
-      if ($cancelOrderReferenceArray['ResponseStatus'] != 200) 
-        throw new Exception($cancelOrderReferenceArray["Error"]["Message"]);
+      $params['amazon_authorization_id'] = $amazonAuthorizationId;
+      $params['capture_reference_id'] = "capture-" . time();
+      $params['capture_amount'] = $amount;
+      $captureResponse = $client->capture($params);
+      $captureArray = $captureResponse->toArray();
+      if ($captureArray['ResponseStatus'] != 200) 
+        throw new Exception($captureArray["Error"]["Message"]);
+      
+      my_print_r($captureArray);
       
       
-      throw new Exception("CaptureNowがtrueなのに、Open状態はおかしい。");
+      //------------------------------------------------------------------------------------
+      // Capture エラーハンドリング
+      //  Pending
+      //  
+      // 原則として、Authorizeが成功している注文に関しては、Captureはオーソリの期間が有効であれば
+      // 成功します。
+      //------------------------------------------------------------------------------------
+      
+      $captureDetails = $captureArray['CaptureDetails'];
+      
+      $captureState   = $captureDetails['State'];
+      
+      
+      
+      
+      
+      
     }
     
     //------------------------------------------------------------------------------------
@@ -276,10 +322,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       
       $authorizationStatusReasonCode = $authorizationDetails['AuthorizationStatus']['ReasonCode'];
       
-      if ($authorizationStatusReasonCode == "MaxCapturesProcessed") {
-        header("Location: shop-thanks.html");
-        exit;
-      }
+      //AuthorizeがCaptureNowの場合は、AuthorizeオブジェクトはClosedになり、
+      //ReasonCodeがMaxCapturesProcessedがCaptureをしたことになるので、
+      //こちらが決済の成功を表します。
+      // if ($authorizationStatusReasonCode == "MaxCapturesProcessed") {
+      //   header("Location: shop-thanks.html");
+      //   exit;
+      // }
     }
 
 
