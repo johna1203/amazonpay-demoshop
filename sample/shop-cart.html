@@ -10,7 +10,7 @@
     <title>ショッピングカート：密林コーヒー Amazon Payデモサイト</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="css/shop-cart.css" rel="stylesheet">
@@ -257,10 +257,6 @@
 
     <!-- Amazon Pay JavaScript -->
     <script type='text/javascript'>
-
-      ///////////////////////////////////////////////////////////////////////////////////
-      //////////////////////////////  TODO ハンズオン JS    ////////////////////////////
-      //////////////////////////////      IDの設定         ////////////////////////////    
     
       let clientId = 'amzn1.application-oa2-client.48ecb861512f4983bfed74eb3a9a06a1'; 
       let sellerId = 'A2MIN1OBNPVKXS';
@@ -276,14 +272,15 @@
 
       function showLoginButton() {
           var authRequest;
-          OffAmazonPayments.Button("", sellerId, {
-            type:  "",
-            color: "",
-            size:  "",
+          OffAmazonPayments.Button("AmazonPayButton", sellerId, {
+            type:  "PwA",
+            color: "Gold",
+            size:  "x-large",
 
             authorization: function() {
-              let loginOptions = {};
-              authRequest = amazon.Login.authorize (loginOptions, "");
+              loginOptions = {scope: "profile payments:widget payments:shipping_address", popup: true};
+              // loginOptions = {scope: "profile payments:widget payments:shipping_address", popup: false};
+              authRequest = amazon.Login.authorize (loginOptions, "shop-confirmation.php");
             },
             onError: function(error) {
                 //document.getElementById("errorCode").innerHTML = error.getErrorCode();
@@ -297,7 +294,7 @@
        async></script>
 
     <!-- Bootstrap core JavaScript -->
-    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="../vendor/jquery/jquery.min.js"></script>
 
   </body>
 

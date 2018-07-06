@@ -3,7 +3,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once './vendor/autoload.php';
+require_once '../vendor/autoload.php';
 
 function my_print_r($array) {
   echo '<pre>';
@@ -56,15 +56,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $params = [];
     $params["amazon_order_reference_id"] = $orderReferenceId;
     $params["amount"] = $amount;
-    
-    ///////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////  TODO ハンズオン  1  ///////////////////////////////
-    
-    
-    
-    //////////////////////////////  TODO ハンズオン  1  ///////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////
-    
+    $setOrderReferenceDetailsResponse = $client->setOrderReferenceDetails($params);
+    $setOrderReferenceDetailsArray = $setOrderReferenceDetailsResponse->toArray();
     if ($setOrderReferenceDetailsArray['ResponseStatus'] != 200) 
        throw new Exception($setOrderReferenceDetailsArray["Error"]["Message"]);
        
@@ -92,15 +85,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   
     $params = [];
     $params["amazon_order_reference_id"] = $orderReferenceId;
-
-    ///////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////  TODO ハンズオン  2  ///////////////////////////////
-    
-    
-    
-    //////////////////////////////  TODO ハンズオン  2  ///////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////
-
+    $confirmOrderReferenceResponse = $client->confirmOrderReference($params);
+    $confirmOrderReferenceArray = $confirmOrderReferenceResponse->toArray();
     if ($confirmOrderReferenceArray['ResponseStatus'] != 200) 
        throw new Exception($confirmOrderReferenceArray["Error"]["Message"]);
     
@@ -127,15 +113,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $params = [];
     $params['amazon_order_reference_id'] = $orderReferenceId; 
     // $params['access_token'] = $accessToken;
-
-    ///////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////  TODO ハンズオン  3  ///////////////////////////////
-    
-    
-    
-    //////////////////////////////  TODO ハンズオン  3  ///////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////
-
+    $orderReferenceDetailsResponse = $client->getOrderReferenceDetails($params);
+    $orderReferenceDetailsArray = $orderReferenceDetailsResponse->toArray();
     if ($orderReferenceDetailsArray['ResponseStatus'] != 200)
       throw new Exception($orderReferenceDetailsArray["Error"]["Message"]);
 
@@ -171,18 +150,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $params["amazon_order_reference_id"] = $orderReferenceId;
     $params["authorization_amount"] = $amount;
     $params["authorization_reference_id"] = time();
-
-
-    ///////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////  TODO ハンズオン  4  ///////////////////////////////
-    $params["transaction_timeout"] = null;
-    $params["capture_now"] = null;    
-    
-    
-    //////////////////////////////  TODO ハンズオン  4  ///////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////
-    
-    
+    $params["transaction_timeout"] = 0;
+    $params["capture_now"] = false;
+    $authorizeResponse = $client->authorize($params);
+    $authorizeArray = $authorizeResponse->toArray();
     if ($authorizeArray['ResponseStatus'] != 200) 
        throw new Exception($authorizeArray["Error"]["Message"]);
 
@@ -306,15 +277,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $params['amazon_authorization_id'] = $amazonAuthorizationId;
       $params['capture_reference_id'] = "capture-" . time();
       $params['capture_amount'] = $amount;
-
-      ///////////////////////////////////////////////////////////////////////////////////
-      //////////////////////////////  TODO ハンズオン  5  ///////////////////////////////      
-      
-      
-      
-      ///////////////////////////////////////////////////////////////////////////////////
-      //////////////////////////////  TODO ハンズオン  5  ///////////////////////////////
-      
+      $captureResponse = $client->capture($params);
+      $captureArray = $captureResponse->toArray();
       if ($captureArray['ResponseStatus'] != 200) 
         throw new Exception($captureArray["Error"]["Message"]);
 
@@ -403,7 +367,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>注文確認ページ：密林コーヒー Amazon Payデモサイト</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="css/shop-confirmation.css" rel="stylesheet">
@@ -595,9 +559,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <!-- Amazon Pay JavaScript -->
     <script type='text/javascript'>
-    ///////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////  TODO ハンズオン JS    ////////////////////////////
-    //////////////////////////////      IDの設定         ////////////////////////////    
     
     let clientId = 'amzn1.application-oa2-client.48ecb861512f4983bfed74eb3a9a06a1'; 
     let sellerId = 'A2MIN1OBNPVKXS';
@@ -621,28 +582,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         amazon.Login.setUseCookie(false); //popup=falseにときに必要
 
         if (accessToken) {
-          //AccessTokenの確認
           document.getElementById("accessToken").value = accessToken;
-          amazon.Login.retrieveProfile(accessToken, function (response) {
-            //ログイン直後 Profile を取得
-            // if (response.success) {
-            //   console.log("Amazon Account Name :" + response.profile.Name);
-            //   console.log("Amazon Account Mail :" + response.profile.PrimaryEmail);
-            //   console.log("Amazon UserId :" + response.profile.CustomerId);
+          amazon.Login.retrieveProfile(accessToken, function (response){
+            if (response.success) {
+              console.log("Amazon Account Name :" + response.profile.Name);
+              console.log("Amazon Account Mail :" + response.profile.PrimaryEmail);
+              console.log("Amazon UserId :" + response.profile.CustomerId);
               
-            // }
+            }
           });
         }
       };
 
       window.onAmazonPaymentsReady = function() {
-        ///////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////  TODO ハンズオン JS  1  ////////////////////////////
+        showAddressBookWidget();
 
-
-        //////////////////////////////  TODO ハンズオン JS  1  ////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////
-        
       };
 
       function showAddressBookWidget() {
@@ -650,16 +604,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           new OffAmazonPayments.Widgets.AddressBook({
             sellerId: sellerId,
 
-            //orderReference.getAmazonOrderReferenceId()を使えば、Order Referenceが取得できます。
             onReady: function (orderReference) {
-                ///////////////////////////////////////////////////////////////////////////////////
-                //////////////////////////////  TODO ハンズオン JS  ２  ////////////////////////////
-        
-        
-                //////////////////////////////  TODO ハンズオン JS  ２  ////////////////////////////
-                ///////////////////////////////////////////////////////////////////////////////////
+                var orderReferenceId = orderReference.getAmazonOrderReferenceId();
                 
-                // Walletを表示させる
+                document.getElementById("orderReferenceId").value = orderReferenceId;
+                
+                // Wallet
+                showWalletWidget(orderReferenceId);
             },
             onAddressSelect: function (orderReference) {
                 // お届け先の住所が変更された時に呼び出されます、ここで手数料などの再計算ができます。
@@ -729,8 +680,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 console.log(orderReference.getAmazonOrderReferenceId());
             },
             onPaymentSelect: function() {
-              
-              
+                console.log(arguments);
             },
             design: {
                 designMode: 'responsive'
@@ -751,7 +701,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
        async></script>
 
     <!-- Bootstrap core JavaScript -->
-    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="../vendor/jquery/jquery.min.js"></script>
   </body>
 
 </html>
