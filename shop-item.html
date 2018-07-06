@@ -2,16 +2,6 @@
 <html lang="en">
 
   <head>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-120528659-1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'UA-120528659-1');
-    </script>
-
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -102,7 +92,7 @@
 
                     <div class="form-group">
                       <div class="offset-md-12 col-md-12 col-xs-12">
-                        <button type="submit" class="btn btn-info btn-lg btn-block" data-toggle="tooltip" data-container="body"  data-placement="top" data-html="true" title="<p>このサイトでは、Amazon Payが実現する簡単・安心な決済をお客様の立場から体験いただけます。</p><p>まずは、こちらからショッピングカートへお進みください。</p><p id='text-underline'>※デモサイトのため、実際には注文されません。</p>">カートにいれる</button>
+                        <button type="submit" class="btn btn-info btn-lg btn-block">カートにいれる</button>
                       </div>
                     </div>
                 　</form>
@@ -149,43 +139,6 @@
     <!-- Bootstrap core JavaScript -->
 
     <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/jquery/jquery.highlight.js"></script>
-
-    <script src="vendor/bootstrap/js/popper.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Tooltip -->
-    <script>
-    $(function () {
-      window.setTimeout(function(){
-          $('#highlight').highlightOverlay();
-
-          window.setTimeout(function(){
-            $('[data-toggle="tooltip"]').tooltip(
-              {
-                trigger: 'manual'
-              }
-            ).tooltip('show')
-            .on(
-              'mouseenter',
-              function() {
-                $(this).tooltip('hide');
-              }
-            )
-            .on(
-              'mouseleave',
-              function() {
-                $(this).tooltip('show');
-              }
-            );
-          },500);
-      },1400);
-
-      $(window).scroll(function() {
-        $.dismissHighlightOverlay();
-      });
-    });
-    </script>
 
   </body>
 
