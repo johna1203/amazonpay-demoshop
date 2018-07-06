@@ -198,7 +198,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       if ($cancelOrderReferenceArray['ResponseStatus'] != 200) 
         throw new Exception($cancelOrderReferenceArray["Error"]["Message"]);
       
-    } 
+    }
+    
+    //------------------------------------------------------------------------------------
+    // Authorization State
+    //  Declined
+    //  
+    //  同期モードでは、オーソリオブジェクトはすぐにOpen状態に遷移します。
+    //  今回は、CaptureNowで即時売り上げ請求しているので、Open状態は問題の可能性がありますので
+    //  キャンセルをするします。
+    // - Closedには、以下の ReasonCode があります。
+    //   - InvalidPaymentMethod            支払方法に問題がありました。Soft DeclineとHard Declineを区別するためにSoftDeclineを利用します。
+    //   - AmazonRejected                  Amazonはオーソリを拒否しました。
+    //   - ProcessingFailure               Amazonは内部処理エラーのためにトランザクションを処理できませんでした。
+    //   - TransactionTimedOut             同期モードの場合は、Amazonが30秒以内にリクエストを処理できませんでした。
+    //------------------------------------------------------------------------------------    
+    else if($authorizationState == "Declined") { 
+
+      $authorizationStatusReasonCode = $authorizationDetails['AuthorizationStatus']['ReasonCode'];
+
+      switch ($authorizationStatusReasonCode) {
+        case 'InvalidPaymentMethod':
+        case 'ProcessingFailure':
+        case 'TransactionTimedOut':
+          $params = [];
+          $params['amazon_order_reference_id'] = $orderReferenceId;
+          $cancelOrderReferenceResponse = $client->cancelOrderReference($params);
+          $cancelOrderReferenceArray = $cancelOrderReferenceResponse->toArray();
+          if ($cancelOrderReferenceArray['ResponseStatus'] != 200) 
+            throw new Exception($cancelOrderReferenceArray["Error"]["Message"]);
+            
+          throw new Exception("ReasonCodeがおかしいです。再度注文してください。");
+          break;
+        case 'AmazonRejected':
+          throw new Exception("決済時に問題が発生しました、別の支払い方法を試すか再度行ってください。");          
+          break;
+        default:
+            throw new Exception("予定外のReasonCode");
+          break;
+      }
+    }    
     
     //------------------------------------------------------------------------------------
     // Authorization State
@@ -277,45 +316,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             throw new Exception($cancelOrderReferenceArray["Error"]["Message"]);
             
           throw new Exception("キャプチャーに失敗しました。");
-    }
-  }
-    
-    //------------------------------------------------------------------------------------
-    // Authorization State
-    //  Declined
-    //  
-    //  同期モードでは、オーソリオブジェクトはすぐにOpen状態に遷移します。
-    //  今回は、CaptureNowで即時売り上げ請求しているので、Open状態は問題の可能性がありますので
-    //  キャンセルをするします。
-    // - Closedには、以下の ReasonCode があります。
-    //   - InvalidPaymentMethod            支払方法に問題がありました。Soft DeclineとHard Declineを区別するためにSoftDeclineを利用します。
-    //   - AmazonRejected                  Amazonはオーソリを拒否しました。
-    //   - ProcessingFailure               Amazonは内部処理エラーのためにトランザクションを処理できませんでした。
-    //   - TransactionTimedOut             同期モードの場合は、Amazonが30秒以内にリクエストを処理できませんでした。
-    //------------------------------------------------------------------------------------    
-    else if($authorizationState == "Declined") { 
-
-      $authorizationStatusReasonCode = $authorizationDetails['AuthorizationStatus']['ReasonCode'];
-
-      switch ($authorizationStatusReasonCode) {
-        case 'InvalidPaymentMethod':
-        case 'ProcessingFailure':
-        case 'TransactionTimedOut':
-          $params = [];
-          $params['amazon_order_reference_id'] = $orderReferenceId;
-          $cancelOrderReferenceResponse = $client->cancelOrderReference($params);
-          $cancelOrderReferenceArray = $cancelOrderReferenceResponse->toArray();
-          if ($cancelOrderReferenceArray['ResponseStatus'] != 200) 
-            throw new Exception($cancelOrderReferenceArray["Error"]["Message"]);
-            
-          throw new Exception("ReasonCodeがおかしいです。再度注文してください。");
-          break;
-        case 'AmazonRejected':
-          throw new Exception("決済時に問題が発生しました、別の支払い方法を試すか再度行ってください。");          
-          break;
-        default:
-            throw new Exception("予定外のReasonCode");
-          break;
       }
     }
     
