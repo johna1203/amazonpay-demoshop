@@ -242,9 +242,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $captureArray = $captureResponse->toArray();
       if ($captureArray['ResponseStatus'] != 200) 
         throw new Exception($captureArray["Error"]["Message"]);
-      
-      my_print_r($captureArray);
-      
+
       
       //------------------------------------------------------------------------------------
       // Capture エラーハンドリング
@@ -252,18 +250,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       //  
       // 原則として、Authorizeが成功している注文に関しては、Captureはオーソリの期間が有効であれば
       // 成功します。
+      // 
+      // Capture State - 
+      //  Pending         売上請求オブジェクトは、Amazonが処理するまではPending状態です。
+      //  Declined        オーソリに対して30日間（SANDBOXでは2日間）以内に売上請求をしなければなりません。
+      //  Completed       売上請求は完了
+      //  Closed          売上請求オブジェクトがClosed状態に遷移したときは、売上請求に対して返金リクエストはできません。
       //------------------------------------------------------------------------------------
       
-      $captureDetails = $captureArray['CaptureDetails'];
+      $captureDetails = $captureArray['CaptureResult']['CaptureDetails'];
+      $captureState   = $captureDetails['CaptureStatus']['State'];
+      $amazonCaptureId   = $captureDetail['AmazonCaptureId'];
       
-      $captureState   = $captureDetails['State'];
+      if ($captureState == 'Pending' || $captureState == 'Completed') {
+        header("Location: shop-thanks.html");
+        exit;
+      } 
       
-      
-      
-      
-      
-      
+      elseif ($captureState == 'Declined' || $captureState == 'Closed') {
+        
+          $params = [];
+          $params['amazon_order_reference_id'] = $orderReferenceId;
+          $cancelOrderReferenceResponse = $client->cancelOrderReference($params);
+          $cancelOrderReferenceArray = $cancelOrderReferenceResponse->toArray();
+          if ($cancelOrderReferenceArray['ResponseStatus'] != 200) 
+            throw new Exception($cancelOrderReferenceArray["Error"]["Message"]);
+            
+          throw new Exception("キャプチャーに失敗しました。");
     }
+  }
     
     //------------------------------------------------------------------------------------
     // Authorization State
