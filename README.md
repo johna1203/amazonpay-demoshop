@@ -43,6 +43,41 @@
 
 ![assets/image6.png](assets/image6.png)
 
+# git を使って、デモショップをCloud9 にcloneしよう。
+
+```
+ $ git clone https://github.com/johna1203/amazonpay-demoshop.git
+Cloning into 'amazonpay-demoshop'...
+remote: Counting objects: 272, done.
+remote: Compressing objects: 100% (49/49), done.
+remote: Total 272 (delta 27), reused 47 (delta 13), pack-reused 207
+Receiving objects: 100% (272/272), 10.55 MiB | 34.62 MiB/s, done.
+Resolving deltas: 100% (138/138), done.
+
+# Amazon PayのSDKを導入する
+$ cd amazonpay-demoshop/
+$ ./bin/composer.phar install
+Loading composer repositories with package information
+Updating dependencies (including require-dev)
+Package operations: 1 install, 0 updates, 0 removals
+  - Installing amzn/amazon-pay-sdk-php (3.3.1): Downloading (100%)         
+Writing lock file
+Generating autoload files
+
+#サーバーを起動する
+
+$ php -S 0.0.0.0:8080
+PHP 5.6.36 Development Server started at Thu Jul  5 09:25:55 2018
+Listening on http://0.0.0.0:8080
+Document root is /home/ec2-user/environment/amazonpay-demoshop
+
+```
+
+### config/config.sample.php config.local.phpに変更
+
+
+
+
 # PHP Buil-in server を使ってデモショップを動かそう。
 
 
@@ -78,3 +113,7 @@ https://www.granfairs.com/blog/cto/php-builtin-server
 PHP のパッケージ管理を使った方が楽に導入できます。
 
 https://github.com/amzn/amazon-pay-sdk-php
+
+
+
+
