@@ -299,7 +299,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       
       $captureDetails = $captureArray['CaptureResult']['CaptureDetails'];
       $captureState   = $captureDetails['CaptureStatus']['State'];
-      $amazonCaptureId   = $captureDetail['AmazonCaptureId'];
+      $amazonCaptureId   = $captureDetails['AmazonCaptureId'];
       
       if ($captureState == 'Pending' || $captureState == 'Completed') {
         header("Location: shop-thanks.html");
